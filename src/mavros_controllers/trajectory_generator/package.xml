@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>minimum_snap_trajectory</name>
+  <version>1.6.3</version>
+  <description>The stereo matching package</description>
+  <maintainer email="zhumingming@sineva.com.cn">lee</maintainer>
+  <license>TODO</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>quadrotor_msgs</build_depend>
+  <build_depend>controller_msgs</build_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>message_runtime</exec_depend>
+  <exec_depend>quadrotor_msgs</exec_depend>
+  <exec_depend>controller_msgs</exec_depend>
+</package>

@@ -4,6 +4,9 @@ CMakeFiles
 CMakeScripts
 Testing
 Makefile
+build
+devel
+vscode
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json
