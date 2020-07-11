@@ -7,18 +7,27 @@ void generateGlobaltrajectory(polynomial_trajectories::PolynomialTrajectory &tra
 {
     // setup all the waypoints
     std::vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d>> waypoints;
-    Eigen::Vector3d goal_0(0, 0, 2);
-    Eigen::Vector3d goal_1(4, 4, 1);
-    Eigen::Vector3d goal_2(0, 7, 2);
-    Eigen::Vector3d goal_3(-1, 10, 3);
-    Eigen::Vector3d goal_4(-3, 3, 1);
+    Eigen::Vector3d goal_0(3.7, -0.4, 2.0);
+    Eigen::Vector3d goal_1(5.2, -4.5, 1.3);
+    Eigen::Vector3d goal_2(3.8, -9.2, 0.5);
+    Eigen::Vector3d goal_3(1.5, -10.1, 0.5);
+    Eigen::Vector3d goal_4(0.3, -12.3, 0.5);
+    Eigen::Vector3d goal_5(-0.9, -14.6, 1.3);
+    Eigen::Vector3d goal_6(-6.1, -13.8, 0.8);
+    Eigen::Vector3d goal_7(-4.3, -9.9, 0.5);
+    Eigen::Vector3d goal_8(-3.9, -5.0, 1.6);
+    Eigen::Vector3d goal_9(-1.4, 0.6, 0.5);
 
     waypoints.push_back(goal_0);
     waypoints.push_back(goal_1);
     waypoints.push_back(goal_2);
     waypoints.push_back(goal_3);
     waypoints.push_back(goal_4);
-
+    waypoints.push_back(goal_5);
+    waypoints.push_back(goal_6);
+    waypoints.push_back(goal_7);
+    waypoints.push_back(goal_8);
+    waypoints.push_back(goal_9);
     // iterate over waypoints, extract waypoints only if further away than threshold from last one
     Eigen::Vector3d last = 999 * Eigen::Vector3d::Ones();
     std::vector<Eigen::Vector3d> waypoints_filtered;
