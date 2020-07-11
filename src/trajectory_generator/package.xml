@@ -2,8 +2,8 @@
 <package format="2">
   <name>minimum_snap_trajectory</name>
   <version>1.6.3</version>
-  <description>The stereo matching package</description>
-  <maintainer email="zhumingming@sineva.com.cn">lee</maintainer>
+  <description>The minimum snap trajectory generator</description>
+  <maintainer email="lcyfly1@163.com">lee</maintainer>
   <license>TODO</license>
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>message_generation</build_depend>

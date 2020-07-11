@@ -20,6 +20,8 @@ rosdep update
 
 ### Install Dependencies
 
+Follow [mavros_installation](https://dev.px4.io/en/ros/mavros_installation.html) to install mavros:
+
 ```
 #install gazebo9
 sudo apt install ros-melodic-gazebo9*
@@ -30,11 +32,9 @@ chmod +x install_geographiclib_datasets.sh
 sudo ./install_geographiclib_datasets.sh
 ```
 
-参考[mavros_installation](https://dev.px4.io/en/ros/mavros_installation.html)
-
 ### Install PX4 SITL  
 
-参考[ROS with Gazebo Simulation](https://dev.px4.io/master/en/simulation/ros_interface.html)以及[Development Environment on Ubuntu](https://dev.px4.io/master/en/setup/dev_env_linux_ubuntu.html)对PX4进行安装编译。
+According to the instruction [ROS with Gazebo Simulation](https://dev.px4.io/master/en/simulation/ros_interface.html) and [Development Environment on Ubuntu](https://dev.px4.io/master/en/setup/dev_env_linux_ubuntu.html) to build the PX4
 
 ```
 wget https://raw.githubusercontent.com/PX4/Firmware/master/Tools/setup/ubuntu.sh
@@ -47,10 +47,18 @@ cd Firmware
 git submodule update --init --recursive
 git checkout v1.11.0-beta1
 make distclean
-## to test wether if the installation succeeds
 make px4_sitl_default gazebo
 ```
 
+#### Source the PX4 environment :
 
+```
+cd <Firmware_directory>
+source Tools/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
+```
 
-## Race!
+## Let's Race!
+
+#### Installation
