@@ -32,6 +32,14 @@ chmod +x install_geographiclib_datasets.sh
 sudo ./install_geographiclib_datasets.sh
 ```
 
+### Install the drone race package
+
+```
+git clone https://github.com/Lee0326/Drone_Racing_BIT.git
+cd Drone_Racing_BIT
+catkin_make
+```
+
 ### Install PX4 SITL  
 
 According to the instruction [ROS with Gazebo Simulation](https://dev.px4.io/master/en/simulation/ros_interface.html) and [Development Environment on Ubuntu](https://dev.px4.io/master/en/setup/dev_env_linux_ubuntu.html) to build the PX4
@@ -52,13 +60,35 @@ make px4_sitl_default gazebo
 
 #### Source the PX4 environment :
 
+Open the bashrc file:
+
 ```
-cd <Firmware_directory>
-source Tools/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
-export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
-export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
+sudo gedit ~/.bashrc 
+```
+
+Add the following command to the end of the file:
+
+```
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:${your Drone_Racing_BIT path}/Drone_Racing_BIT/src/simulation/models
+source ${your px4 path}/Firmware_v110/Tools/setup_gazebo.bash ${your px4 path}/Firmware_v110 ${your px4 path}/Firmware_v110/build/px4_sitl_default
+source ${your Drone_Racing_BIT path}/Drone_Racing_BIT/devel/setup.bash
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:${your px4 path}/Firmware_v110
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:${your px4 path}/Firmware_v110/Tools/sitl_gazebo
 ```
 
 ## Let's Race!
 
-#### Installation
+#### Test the indoor race track
+
+First, start the gazebo simulation along with px4 sitl and mavros:
+
+```
+roslaunch drone_racing_simulation indoor_race_track.launch
+```
+
+When the drone is armed and takeoff to the desired initial position, then:
+
+```
+rosrun minimum_snap_trajectory minimum_snap_trajectory_node
+```
+
