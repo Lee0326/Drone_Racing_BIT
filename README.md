@@ -94,4 +94,4 @@ rosrun minimum_snap_trajectory minimum_snap_trajectory_node
 
 The drone follows the globally planned trajectory containing all the gates position as waypoints (1.5xspeed) :
 
-[![UGoee0.gif](https://s1.ax1x.com/2020/07/13/UGoee0.gif)](https://imgchr.com/i/UGoee0)
+[![UGoee0.md.gif](https://s1.ax1x.com/2020/07/13/UGoee0.md.gif)](https://imgchr.com/i/UGoee0)
