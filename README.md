@@ -92,3 +92,6 @@ When the drone is armed and takeoff to the desired initial position, then:
 rosrun minimum_snap_trajectory minimum_snap_trajectory_node
 ```
 
+The drone follows the globally planned trajectory containing all the gates position as waypoints (1.5xspeed) :
+
+![UGhJ54.gif](https://s1.ax1x.com/2020/07/13/UGhJ54.gif)
