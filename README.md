@@ -78,7 +78,7 @@ export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:${your px4 path}/Firmware_v110/Tools/s
 
 ## Let's Race!
 
-#### Test the indoor race track
+#### Test the indoor race track in gazebo
 
 First, start the gazebo simulation along with px4 sitl and mavros:
 
@@ -96,3 +96,11 @@ The drone follows the globally planned trajectory containing all the gates posit
 
 ![indoor](files/indoor.gif)
 
+#### Run the simulation in rviz:
+
+```
+roslaunch so3_quadrotor_simulator simulator.launch
+rosrun gate_visualization gate_visualization
+```
+
+![indoor](files/rviz.gif)
