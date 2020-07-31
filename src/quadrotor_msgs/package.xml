@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>quadrotor_msgs</name>
+  <name>quadrotor_msgs_uzh</name>
   <version>0.0.0</version>
   <description>The quadrotor_msgs package</description>
 

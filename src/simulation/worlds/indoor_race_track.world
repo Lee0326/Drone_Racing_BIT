@@ -42,7 +42,7 @@
           </geometry>
           <material>
             <script>
-            <uri>model://texture/texture.material</uri>
+            <uri>model://textures/texture.material</uri>
             <name>Floor_Wood</name>
             </script>
           </material>
@@ -176,7 +176,7 @@
           </geometry>
           <material>
             <script>
-              <uri>model://texture/texture.material</uri>
+              <uri>model://textures/texture.material</uri>
               <name>gate_texture</name>
             </script>
           </material>
@@ -233,7 +233,7 @@
           </geometry>
           <material>
             <script>
-              <uri>model://texture/texture.material</uri>
+              <uri>model://textures/texture.material</uri>
               <name>gate_texture</name>
             </script>
           </material>
@@ -291,7 +291,7 @@
           </geometry>
           <material>
             <script>
-              <uri>model://texture/texture.material</uri>
+              <uri>model://textures/texture.material</uri>
               <name>gate_texture</name>
             </script>
           </material>
@@ -349,7 +349,7 @@
           </geometry>
           <material>
             <script>
-              <uri>model://texture/texture.material</uri>
+              <uri>model://textures/texture.material</uri>
               <name>gate_texture</name>
             </script>
           </material>
@@ -406,7 +406,7 @@
           </geometry>
           <material>
             <script>
-              <uri>model://texture/texture.material</uri>
+              <uri>model://textures/texture.material</uri>
               <name>gate_texture</name>
             </script>
           </material>
@@ -463,7 +463,7 @@
           </geometry>
           <material>
             <script>
-              <uri>model://texture/texture.material</uri>
+              <uri>model://textures/texture.material</uri>
               <name>gate_texture</name>
             </script>
           </material>
@@ -521,7 +521,7 @@
           </geometry>
           <material>
             <script>
-              <uri>model://texture/texture.material</uri>
+              <uri>model://textures/texture.material</uri>
               <name>gate_texture</name>
             </script>
           </material>
@@ -579,7 +579,7 @@
           </geometry>
           <material>
             <script>
-              <uri>model://texture/texture.material</uri>
+              <uri>model://textures/texture.material</uri>
               <name>gate_texture</name>
             </script>
           </material>
@@ -636,7 +636,7 @@
           </geometry>
           <material>
             <script>
-              <uri>model://texture/texture.material</uri>
+              <uri>model://textures/texture.material</uri>
               <name>gate_texture</name>
             </script>
           </material>
@@ -693,7 +693,7 @@
           </geometry>
           <material>
             <script>
-              <uri>model://texture/texture.material</uri>
+              <uri>model://textures/texture.material</uri>
               <name>gate_texture</name>
             </script>
           </material>

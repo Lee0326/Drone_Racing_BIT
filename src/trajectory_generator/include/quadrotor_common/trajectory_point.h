@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Eigen/Dense>
-#include <quadrotor_msgs/TrajectoryPoint.h>
+#include <quadrotor_msgs_uzh/TrajectoryPoint.h>
 #include <ros/duration.h>
 
 namespace quadrotor_common
@@ -12,10 +12,10 @@ struct TrajectoryPoint
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
   TrajectoryPoint();
-  TrajectoryPoint(const quadrotor_msgs::TrajectoryPoint& trajectory_point_msg);
+  TrajectoryPoint(const quadrotor_msgs_uzh::TrajectoryPoint& trajectory_point_msg);
   virtual ~TrajectoryPoint();
 
-  quadrotor_msgs::TrajectoryPoint toRosMessage() const;
+  quadrotor_msgs_uzh::TrajectoryPoint toRosMessage() const;
 
   ros::Duration time_from_start;
 

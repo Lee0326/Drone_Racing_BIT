@@ -1,0 +1,29 @@
+<package>
+  <version>0.0.0</version>
+  <name>gate_visualization</name>
+  <description>
+
+     gate_visualization
+
+  </description>
+  <maintainer email="lcyfly1@163.com">Colin Lee</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>visualization_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>pose_utils</build_depend>
+  <build_depend>quadrotor_msgs</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>message_runtime</run_depend>
+  <run_depend>visualization_msgs</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>pose_utils</run_depend>
+  <run_depend>quadrotor_msgs</run_depend>
+
+</package>
+
+

@@ -19,7 +19,7 @@ TrajectoryPoint::TrajectoryPoint() :
 }
 
 TrajectoryPoint::TrajectoryPoint(
-    const quadrotor_msgs::TrajectoryPoint& trajectory_point_msg)
+    const quadrotor_msgs_uzh::TrajectoryPoint& trajectory_point_msg)
 {
   time_from_start = trajectory_point_msg.time_from_start;
 
@@ -46,9 +46,9 @@ TrajectoryPoint::~TrajectoryPoint()
 {
 }
 
-quadrotor_msgs::TrajectoryPoint TrajectoryPoint::toRosMessage() const
+quadrotor_msgs_uzh::TrajectoryPoint TrajectoryPoint::toRosMessage() const
 {
-  quadrotor_msgs::TrajectoryPoint ros_msg;
+  quadrotor_msgs_uzh::TrajectoryPoint ros_msg;
 
   ros_msg.time_from_start = time_from_start;
 
