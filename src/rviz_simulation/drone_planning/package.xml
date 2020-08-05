@@ -1,9 +1,9 @@
 <package>
   <version>0.0.0</version>
-  <name>gate_visualization</name>
+  <name>drone_planning</name>
   <description>
 
-     gate_visualization
+     drone_planning
 
   </description>
   <maintainer email="lcyfly1@163.com">Colin Lee</maintainer>

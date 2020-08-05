@@ -1,0 +1,23 @@
+<package>
+  <version>0.0.0</version>
+  <name>trajectory_generator</name>
+  <description>
+
+     trajectory_generator
+
+  </description>
+  <maintainer email="lcyfly1@163.com">Colin Lee</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>quadrotor_msgs</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>quadrotor_msgs</run_depend>
+  <run_depend>message_runtime</run_depend>
+
+</package>
+
+

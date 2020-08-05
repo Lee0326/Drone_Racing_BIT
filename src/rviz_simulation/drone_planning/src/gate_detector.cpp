@@ -3,12 +3,12 @@
 #include <string.h>
 #include <gate_detector.h>
 
-Gate::Gate(ros::Publisher &target_pub, Vector3d ini_pos, ros::Time trigger_time, int id, std::shared_ptr<int> &segment_pt, std::shared_ptr<Matrix3d> &target_ptr) : target_pub_(target_pub), ini_pos_(ini_pos), trigger_time_(trigger_time), id_(id), segment_pt_(segment_pt), target_ptr_(target_ptr)
+Gate::Gate(ros::Publisher &target_pub, Vector3d ini_pos, std::shared_ptr<ros::Time> trigger_time, int id, std::shared_ptr<int> &segment_pt, std::shared_ptr<Matrix3d> &target_ptr, double Tf) : target_pub_(target_pub), ini_pos_(ini_pos), trigger_time_(trigger_time), id_(id), segment_pt_(segment_pt), target_ptr_(target_ptr), Tf_(Tf)
 {
-    omega_ = (double)id_ / 4;
+    omega_ = (double)id_ / 8;
 };
 
-void Gate::updateTarget(std::promise<Matrix3d> &&prms)
+void Gate::updateTarget(std::promise<int> &&prms)
 {
     std::unique_lock<std::mutex> lck(_mutex);
     while (ros::ok())
@@ -18,14 +18,9 @@ void Gate::updateTarget(std::promise<Matrix3d> &&prms)
             cv_->wait(lck);
         updateState();
         Matrix3d m;
-        m << 1, 2, 3,
-            4, 5, 6,
-            7, 8, 4;
         if ((id_ == *segment_pt_) && !target_locked_)
         {
-
-            std::cout << omega_ << std::endl;
-            auto delta = Vector3d(0, 0.5 * cos((1 + omega_) * 3), 0);
+            auto delta = Vector3d(0, 0.6 * cos((0.5 + omega_) * Tf_), 0);
             Vector3d demand_position = position_ + delta;
             m(0, 0) = demand_position(0);
             m(1, 0) = demand_position(1);
@@ -35,7 +30,7 @@ void Gate::updateTarget(std::promise<Matrix3d> &&prms)
         }
         if ((id_ == *segment_pt_) && (!is_triggered_))
         {
-            prms.set_value(m);
+            prms.set_value(id_);
             is_triggered_ = true;
         }
         ros::spinOnce();
@@ -44,15 +39,14 @@ void Gate::updateTarget(std::promise<Matrix3d> &&prms)
 
 void Gate::updateState()
 {
-
-    double duration = (ros::Time::now() - trigger_time_).toSec();
-    auto deltaPos = Vector3d(0, 0.5 * cos((1 + omega_) * duration), 0);
+    double duration = (ros::Time::now() - *trigger_time_).toSec();
+    auto deltaPos = Vector3d(0, 0.6 * cos((0.5 + omega_) * duration), 0);
     position_ = ini_pos_ + deltaPos;
     if (id_ != 1)
         Gate::publishMaker();
     ros::spinOnce();
 };
-void Gate::setCV(std::shared_ptr<::condition_variable> &cv)
+void Gate::setCV(std::shared_ptr<std::condition_variable> cv)
 {
     cv_ = cv;
 };
@@ -69,16 +63,16 @@ void Gate::publishMaker()
     //set the pose of the gate
     maker_.pose.position.x = position_[0];
     maker_.pose.position.y = position_[1];
-    maker_.pose.position.z = position_[2] - 0.5;
+    maker_.pose.position.z = position_[2] - 0.8;
     maker_.pose.orientation.x = 0.0;
     maker_.pose.orientation.y = 0.0;
     maker_.pose.orientation.z = 0.0;
     maker_.pose.orientation.w = 1.0;
 
     //set the scale
-    maker_.scale.x = 1;
-    maker_.scale.y = 1;
-    maker_.scale.z = 1;
+    maker_.scale.x = 1.7;
+    maker_.scale.y = 1.7;
+    maker_.scale.z = 1.7;
     maker_.color.a = 1.0;
     maker_.color.r = 0.0;
     maker_.color.g = 1.0;

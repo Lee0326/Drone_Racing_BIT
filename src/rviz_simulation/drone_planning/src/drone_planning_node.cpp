@@ -8,7 +8,7 @@
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "gate_visulization");
+    ros::init(argc, argv, "drone_planning");
     ros::NodeHandle n;
     ros::Subscriber odom_sub;
     std::vector<std::shared_ptr<Gate>> gate_targets;
@@ -18,10 +18,10 @@ int main(int argc, char **argv)
     std::shared_ptr<int> segment_pt = std::make_shared<int>(0);
 
     Vector3d init_position1(0, 0, 0.5);
-    Vector3d init_position2(8, -5, 4);
-    Vector3d init_position3(15, 0, 8);
-    Vector3d init_position4(23, 4, 5);
-    Vector3d init_position5(30, 0, 1);
+    Vector3d init_position2(15, -5, 4);
+    Vector3d init_position3(30, 0, 8);
+    Vector3d init_position4(45, 6, 5);
+    Vector3d init_position5(60, 0, 1);
     std::vector<Vector3d> position_vector;
     position_vector.push_back(init_position1);
     position_vector.push_back(init_position2);

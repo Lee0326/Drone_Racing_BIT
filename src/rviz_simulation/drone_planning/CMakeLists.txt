@@ -1,6 +1,6 @@
 
 cmake_minimum_required(VERSION 2.8.3)
-project(gate_visualization)
+project(drone_planning)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -24,14 +24,15 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(gate_visualization 
+add_executable(drone_planning 
 src/gate_detector.cpp
 src/RapidTrajectoryGenerator.cpp
 src/SingleAxisTrajectory.cpp
-src/gate_visulization_node.cpp
+src/drone_planning_node.cpp
+src/trajectory_generator.cpp
 )
 
-target_link_libraries(gate_visualization
+target_link_libraries(drone_planning
    ${catkin_LIBRARIES}
    pose_utils
 )
