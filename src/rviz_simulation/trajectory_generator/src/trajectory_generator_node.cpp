@@ -12,33 +12,38 @@ int main(int argc, char **argv)
     ros::NodeHandle nh("~");
     ros::Publisher posi_cmd_pub = nh.advertise<quadrotor_msgs::PositionCommand>("/position_cmd", 10);
     //Define the trajectory starting state:
-    Vec3 pos0 = Vec3(0, 0, 1); //position
-    Vec3 vel0 = Vec3(0, 0, 0); //velocity
-    Vec3 acc0 = Vec3(0, 0, 0); //acceleration
+    Vec3 pos0 = Vec3(-3, 0, 9); //position
+    Vec3 vel0 = Vec3(0, 0, 0);  //velocity
+    Vec3 acc0 = Vec3(0, 0, 0);  //acceleration
 
     //define the goal state:
-    Vec3 pos1 = Vec3(5, 0, 1); //position
-    Vec3 vel1 = Vec3(0, 0, 0); //velocity
+    Vec3 pos1 = Vec3(2, 0, 9); //position
+    Vec3 vel1 = Vec3(2, 0, 0); //velocity
     Vec3 acc1 = Vec3(0, 0, 0); //acceleration
 
-    Vec3 pos2 = Vec3(15, 7, 3); //position
-    Vec3 vel2 = Vec3(0, 0, 0);  //velocity
-    Vec3 acc2 = Vec3(0, 0, 0);  //acceleration
+    //define the goal state:
+    Vec3 pos2 = Vec3(3, 0, 7);   //position
+    Vec3 vel2 = Vec3(0, 0, -4);  //velocity
+    Vec3 acc2 = Vec3(-15, 0, 0); //acceleration
 
-    Vec3 pos3 = Vec3(35, -5, 2); //position
-    Vec3 vel3 = Vec3(0, 0, 0);   //velocity
-    Vec3 acc3 = Vec3(0, 0, 0);   //acceleration
+    Vec3 pos3 = Vec3(0, 0, 1); //position
+    Vec3 vel3 = Vec3(0, 0, 0); //velocity
+    Vec3 acc3 = Vec3(0, 0, 0); //acceleration
 
-    Vec3 pos4 = Vec3(30, -10, 1); //position
-    Vec3 vel4 = Vec3(0, 0, 0);    //velocity
-    Vec3 acc4 = Vec3(0, 0, 0);    //acceleration
+    // Vec3 pos3 = Vec3(35, -5, 2); //position
+    // Vec3 vel3 = Vec3(0, 0, 0);   //velocity
+    // Vec3 acc3 = Vec3(0, 0, 0);   //acceleration
+
+    // Vec3 pos4 = Vec3(30, -10, 1); //position
+    // Vec3 vel4 = Vec3(0, 0, 0);    //velocity
+    // Vec3 acc4 = Vec3(0, 0, 0);    //acceleration
 
     //define the duration:
     double Tf = 4;
 
     double fmin = 5;          //[m/s**2]
-    double fmax = 25;         //[m/s**2]
-    double wmax = 20;         //[rad/s]
+    double fmax = 50;         //[m/s**2]
+    double wmax = 50;         //[rad/s]
     double minTimeSec = 0.02; //[s]
 
     //Define how gravity lies in our coordinate system
@@ -52,7 +57,7 @@ int main(int argc, char **argv)
     RapidTrajectoryGenerator traj2(pos1, vel1, acc1, gravity);
     RapidTrajectoryGenerator traj3(pos2, vel2, acc2, gravity);
     RapidTrajectoryGenerator traj4(pos3, vel3, acc3, gravity);
-    RapidTrajectoryGenerator traj5(pos4, vel4, acc4, gravity);
+    // RapidTrajectoryGenerator traj5(pos4, vel4, acc4, gravity);
 
     traj1.SetGoalPosition(pos1);
     traj1.SetGoalVelocity(vel1);
@@ -66,13 +71,13 @@ int main(int argc, char **argv)
     traj3.SetGoalVelocity(vel3);
     traj3.SetGoalAcceleration(acc3);
 
-    traj4.SetGoalPosition(pos4);
-    traj4.SetGoalVelocity(vel4);
-    traj4.SetGoalAcceleration(acc4);
+    // traj4.SetGoalPosition(pos4);
+    // traj4.SetGoalVelocity(vel4);
+    // traj4.SetGoalAcceleration(acc4);
 
-    traj5.SetGoalPosition(pos1);
-    traj5.SetGoalVelocity(vel1);
-    traj5.SetGoalAcceleration(acc1);
+    // traj5.SetGoalPosition(pos1);
+    // traj5.SetGoalVelocity(vel1);
+    // traj5.SetGoalAcceleration(acc1);
 
     // Note: if you'd like to leave some states free, you can encode it like below.
     // Here we would be leaving the velocity in `x` (axis 0) free:
@@ -81,10 +86,10 @@ int main(int argc, char **argv)
     // traj.SetGoalVelocityInAxis(2,velf[2]);
 
     traj1.Generate(Tf);
-    traj2.Generate(Tf);
+    traj2.Generate(0.5 * Tf);
     traj3.Generate(Tf);
-    traj4.Generate(Tf);
-    traj5.Generate(Tf);
+    // traj4.Generate(Tf);
+    // traj5.Generate(Tf);
 
     auto trigger_time = ros::Time::now();
     quadrotor_msgs::PositionCommand pos_cmd;
@@ -156,54 +161,54 @@ int main(int argc, char **argv)
             pos_cmd.yaw = 0;
             pos_cmd.yaw_dot = 0;
         }
-        else if (dt < 4 * Tf)
-        {
-            Vec3 Position = traj4.GetPosition(dt - 3 * Tf);
-            Vec3 Velocity = traj4.GetVelocity(dt - 3 * Tf);
-            Vec3 Acceleration = traj4.GetAcceleration(dt - 3 * Tf);
-            pos_cmd.position.x = Position[0];
-            pos_cmd.position.y = Position[1];
-            pos_cmd.position.z = Position[2];
-            //velocity
-            pos_cmd.velocity.x = Velocity[0];
-            pos_cmd.velocity.y = Velocity[1];
-            pos_cmd.velocity.z = Velocity[2];
-            //acceleration
-            pos_cmd.acceleration.x = Acceleration[0];
-            pos_cmd.acceleration.y = Acceleration[1];
-            pos_cmd.acceleration.z = Acceleration[2];
-            //yaw
-            pos_cmd.yaw = 0;
-            pos_cmd.yaw_dot = 0;
-        }
-        else if (dt < 5 * Tf)
-        {
-            Vec3 Position = traj5.GetPosition(dt - 4 * Tf);
-            Vec3 Velocity = traj5.GetVelocity(dt - 4 * Tf);
-            Vec3 Acceleration = traj5.GetAcceleration(dt - 4 * Tf);
-            pos_cmd.position.x = Position[0];
-            pos_cmd.position.y = Position[1];
-            pos_cmd.position.z = Position[2];
-            //velocity
-            pos_cmd.velocity.x = Velocity[0];
-            pos_cmd.velocity.y = Velocity[1];
-            pos_cmd.velocity.z = Velocity[2];
-            //acceleration
-            pos_cmd.acceleration.x = Acceleration[0];
-            pos_cmd.acceleration.y = Acceleration[1];
-            pos_cmd.acceleration.z = Acceleration[2];
-            //yaw
-            pos_cmd.yaw = 0;
-            pos_cmd.yaw_dot = 0;
-        }
-        else if (dt > 5 * Tf)
-        {
-            dt = 0;
-            trigger_time = ros::Time::now();
-        }
+        // else if (dt < 4 * Tf)
+        // {
+        //     Vec3 Position = traj4.GetPosition(dt - 3 * Tf);
+        //     Vec3 Velocity = traj4.GetVelocity(dt - 3 * Tf);
+        //     Vec3 Acceleration = traj4.GetAcceleration(dt - 3 * Tf);
+        //     pos_cmd.position.x = Position[0];
+        //     pos_cmd.position.y = Position[1];
+        //     pos_cmd.position.z = Position[2];
+        //     //velocity
+        //     pos_cmd.velocity.x = Velocity[0];
+        //     pos_cmd.velocity.y = Velocity[1];
+        //     pos_cmd.velocity.z = Velocity[2];
+        //     //acceleration
+        //     pos_cmd.acceleration.x = Acceleration[0];
+        //     pos_cmd.acceleration.y = Acceleration[1];
+        //     pos_cmd.acceleration.z = Acceleration[2];
+        //     //yaw
+        //     pos_cmd.yaw = 0;
+        //     pos_cmd.yaw_dot = 0;
+        // }
+        // else if (dt < 5 * Tf)
+        // {
+        //     Vec3 Position = traj5.GetPosition(dt - 4 * Tf);
+        //     Vec3 Velocity = traj5.GetVelocity(dt - 4 * Tf);
+        //     Vec3 Acceleration = traj5.GetAcceleration(dt - 4 * Tf);
+        //     pos_cmd.position.x = Position[0];
+        //     pos_cmd.position.y = Position[1];
+        //     pos_cmd.position.z = Position[2];
+        //     //velocity
+        //     pos_cmd.velocity.x = Velocity[0];
+        //     pos_cmd.velocity.y = Velocity[1];
+        //     pos_cmd.velocity.z = Velocity[2];
+        //     //acceleration
+        //     pos_cmd.acceleration.x = Acceleration[0];
+        //     pos_cmd.acceleration.y = Acceleration[1];
+        //     pos_cmd.acceleration.z = Acceleration[2];
+        //     //yaw
+        //     pos_cmd.yaw = 0;
+        //     pos_cmd.yaw_dot = 0;
+        // }
+        // else if (dt > 2 * Tf)
+        // {
+        //     dt = 0;
+        //     trigger_time = ros::Time::now();
+        // }
 
-        pos_cmd.kx = {1, 1, 1};
-        pos_cmd.kv = {1, 1, 1};
+        pos_cmd.kx = {5, 5, 5};
+        pos_cmd.kv = {5, 5, 5};
         posi_cmd_pub.publish(pos_cmd);
         ros::spinOnce();
     }

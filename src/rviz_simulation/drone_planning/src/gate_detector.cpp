@@ -20,7 +20,7 @@ void Gate::updateTarget(std::promise<int> &&prms)
         Matrix3d m;
         if ((id_ == *segment_pt_) && !target_locked_)
         {
-            auto delta = Vector3d(0, 0.6 * cos((0.5 + omega_) * Tf_), 0);
+            auto delta = Vector3d(0, 0.5 * cos((2 + omega_) * Tf_), 0);
             Vector3d demand_position = position_ + delta;
             m(0, 0) = demand_position(0);
             m(1, 0) = demand_position(1);
@@ -40,7 +40,7 @@ void Gate::updateTarget(std::promise<int> &&prms)
 void Gate::updateState()
 {
     double duration = (ros::Time::now() - *trigger_time_).toSec();
-    auto deltaPos = Vector3d(0, 0.6 * cos((0.5 + omega_) * duration), 0);
+    auto deltaPos = Vector3d(0, 0.5 * cos((2 + omega_) * duration), 0);
     position_ = ini_pos_ + deltaPos;
     if (id_ != 1)
         Gate::publishMaker();

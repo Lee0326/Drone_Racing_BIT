@@ -142,7 +142,7 @@ Visualization Manager:
       Marker Topic: /gate_marker4
       Name: Marker
       Namespaces:
-        gate: true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -150,7 +150,7 @@ Visualization Manager:
       Marker Topic: /gate_marker3
       Name: Marker
       Namespaces:
-        gate: true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -158,7 +158,7 @@ Visualization Manager:
       Marker Topic: /gate_marker2
       Name: Marker
       Namespaces:
-        gate: true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -166,7 +166,23 @@ Visualization Manager:
       Marker Topic: /gate_marker1
       Name: Marker
       Namespaces:
-        gate: true
+        {}
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /odom_visualization_ukf/trajectory
+      Name: Marker
+      Namespaces:
+        trajectory: true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /gate_visulization
+      Name: Marker
+      Namespaces:
+        gate_rect: true
       Queue Size: 100
       Value: true
   Enabled: true
