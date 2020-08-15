@@ -12,21 +12,21 @@ int main(int argc, char **argv)
     ros::NodeHandle nh("~");
     ros::Publisher posi_cmd_pub = nh.advertise<quadrotor_msgs::PositionCommand>("/position_cmd", 10);
     //Define the trajectory starting state:
-    Vec3 pos0 = Vec3(-3, 0, 9); //position
+    Vec3 pos0 = Vec3(2, 0, 15); //position
     Vec3 vel0 = Vec3(0, 0, 0);  //velocity
     Vec3 acc0 = Vec3(0, 0, 0);  //acceleration
 
     //define the goal state:
-    Vec3 pos1 = Vec3(2, 0, 9); //position
-    Vec3 vel1 = Vec3(2, 0, 0); //velocity
-    Vec3 acc1 = Vec3(0, 0, 0); //acceleration
+    Vec3 pos1 = Vec3(5, 0, 15); //position
+    Vec3 vel1 = Vec3(3, 0, 0);  //velocity
+    Vec3 acc1 = Vec3(0, 0, 0);  //acceleration
 
     //define the goal state:
-    Vec3 pos2 = Vec3(3, 0, 7);   //position
+    Vec3 pos2 = Vec3(10, 0, 7);  //position
     Vec3 vel2 = Vec3(0, 0, -4);  //velocity
     Vec3 acc2 = Vec3(-15, 0, 0); //acceleration
 
-    Vec3 pos3 = Vec3(0, 0, 1); //position
+    Vec3 pos3 = Vec3(3, 0, 1); //position
     Vec3 vel3 = Vec3(0, 0, 0); //velocity
     Vec3 acc3 = Vec3(0, 0, 0); //acceleration
 
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     // Vec3 acc4 = Vec3(0, 0, 0);    //acceleration
 
     //define the duration:
-    double Tf = 4;
+    double Tf = 3;
 
     double fmin = 5;          //[m/s**2]
     double fmax = 50;         //[m/s**2]
