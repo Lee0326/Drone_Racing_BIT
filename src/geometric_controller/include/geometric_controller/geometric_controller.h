@@ -93,6 +93,7 @@ class geometricCtrl
     std::vector<geometry_msgs::PoseStamped> posehistory_vector_;
     MAV_STATE companion_state_ = MAV_STATE::MAV_STATE_ACTIVE;
 
+    double initTargetPos_x_, initTargetPos_y_, initTargetPos_z_;
     Eigen::Vector3d targetPos_, targetVel_, targetAcc_, targetJerk_, targetSnap_, targetPos_prev_, targetVel_prev_;
     Eigen::Vector3d mavPos_, mavVel_, mavRate_;
     double mavYaw_;
@@ -166,6 +167,7 @@ class geometricCtrl
     void setFeedthrough(bool feed_through);
     virtual ~ geometricCtrl();
 
+    static double getVelocityYaw(const Eigen::Vector3d velocity);
     static Eigen::Vector4d acc2quaternion(const Eigen::Vector3d &vector_acc, const double &yaw);
     static Eigen::Vector4d rot2Quaternion(const Eigen::Matrix3d &R);
     static Eigen::Matrix3d matrix_hat(const Eigen::Vector3d &v);
