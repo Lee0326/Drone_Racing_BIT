@@ -2,14 +2,13 @@ clear all;    	  %清除所有内存变量
 %--------初始化制导系统参数------------------
 pi=3.141592653;
 g=9.8;
-Rmx=0;Rmy=2.5;                                   %无人机的位置
-Rtx=2; Rty=2;                                %门的位置
-Vm=3;                                          %无人机的速度
-Vt=0;                                          %门的速度
-HeadError=10/180*pi;                            %指向角误差
+Rmx=0;Rmy=2.5;                                 %无人机的位置
+Rtx=2; Rty=2;                                  %门的位置
+Vm=2;                                          %无人机的速度
+HeadError=10/180*pi;                           %指向角误差
 
 AtMay=0*g;                                     %目标不机动
-AmMay=5*g;                                     %无人机的最大机动能力为3G
+AmMay=5*g;                                     %无人机的最大机动能力为5G
 
 M_= 5;
 N_= 2;
@@ -23,8 +22,6 @@ SightAngle=atan(Rtmy/Rtmx);                    %视线角
 PathAngle=SightAngle+HeadError;
 Vmx=Vm*cos(SightAngle+HeadError);              %无人机的x轴速度分量
 Vmy=Vm*sin(SightAngle+HeadError);              %无人机的y轴速度分量
-Vtx=0;                                         %门的速度x轴分量
-Vty=0;                                         %门的速度y轴分量
 Vtmx=-Vmx;                                     %无人机和门相对运动的x轴速度分量
 Vtmy=-Vmy;                                     %无人机和门相对运动的y轴速度分量
 Vc=-(Rtmx*Vtmx+Rtmy*Vtmy)/Rtm;                 %无人机和门相对运动速度
@@ -77,15 +74,6 @@ Amy=Am*cos(SightAngle);
 Time=Time+TimeStep;
 
 
-if Time<2
-    At=-0*AtMay;
-elseif Time<7
-    At=AtMay;
-else
-    At=-AtMay;
-end
-
-At=-AtMay*sin(Time*0.25*pi);
 
 
 %无人机
@@ -104,8 +92,8 @@ Rtm0=Rtm;%上一步的脱靶量
 Rtm=sqrt(Rtmx^2+Rtmy^2);
 SightAngle=atan(Rtmy/Rtmx); %视线角
 %无人机和门相对速度
-Vtmy=Vty-Vmy;
-Vtmx=Vtx-Vmx;
+Vtmy=-Vmy;
+Vtmx=-Vmx;
 Vc=-(Rtmy*Vtmy+Rtmx*Vtmx)/Rtm;
 %数据写文件
 % fprintf(file,'%f %f %f %f %f %f %f \n',Time,Rmy,Rmx,Rty,Rtx,sqrt(Amy^2+Amx^2), Rtm);
@@ -117,7 +105,7 @@ rmy2(1,q)=Rmy;
 rtx2(1,q)=Rtx;
 rty2(1,q)=Rty;
 
-a1(1,q)=At;
+a1(1,q)=0;
 a2(1,q)=Am;
 time2(1,q)=Time;
 
