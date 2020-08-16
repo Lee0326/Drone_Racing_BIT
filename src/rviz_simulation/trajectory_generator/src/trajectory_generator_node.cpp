@@ -12,23 +12,28 @@ int main(int argc, char **argv)
     ros::NodeHandle nh("~");
     ros::Publisher posi_cmd_pub = nh.advertise<quadrotor_msgs::PositionCommand>("/position_cmd", 10);
     //Define the trajectory starting state:
-    Vec3 pos0 = Vec3(2, 0, 15); //position
-    Vec3 vel0 = Vec3(0, 0, 0);  //velocity
-    Vec3 acc0 = Vec3(0, 0, 0);  //acceleration
+    Vec3 pos0 = Vec3(0, 0, 0); //position
+    Vec3 vel0 = Vec3(0, 0, 0); //velocity
+    Vec3 acc0 = Vec3(0, 0, 0); //acceleration
 
     //define the goal state:
-    Vec3 pos1 = Vec3(5, 0, 15); //position
-    Vec3 vel1 = Vec3(3, 0, 0);  //velocity
-    Vec3 acc1 = Vec3(0, 0, 0);  //acceleration
+    Vec3 pos1 = Vec3(0, 0, 2); //position
+    Vec3 vel1 = Vec3(0, 0, 0); //velocity
+    Vec3 acc1 = Vec3(0, 0, 0); //acceleration
 
     //define the goal state:
-    Vec3 pos2 = Vec3(10, 0, 7);  //position
-    Vec3 vel2 = Vec3(0, 0, -4);  //velocity
-    Vec3 acc2 = Vec3(-15, 0, 0); //acceleration
+    Vec3 pos2 = Vec3(3, 0, 3); //position
+    Vec3 vel2 = Vec3(3, 0, 0); //velocity
+    Vec3 acc2 = Vec3(0, 0, 0); //acceleration
 
-    Vec3 pos3 = Vec3(3, 0, 1); //position
+    //define the goal state:
+    Vec3 pos3 = Vec3(6, 0, 3); //position
     Vec3 vel3 = Vec3(0, 0, 0); //velocity
     Vec3 acc3 = Vec3(0, 0, 0); //acceleration
+
+    // Vec3 pos3 = Vec3(3, 0, 1); //position
+    // Vec3 vel3 = Vec3(0, 0, 0); //velocity
+    // Vec3 acc3 = Vec3(0, 0, 0); //acceleration
 
     // Vec3 pos3 = Vec3(35, -5, 2); //position
     // Vec3 vel3 = Vec3(0, 0, 0);   //velocity
@@ -56,7 +61,7 @@ int main(int argc, char **argv)
     RapidTrajectoryGenerator traj1(pos0, vel0, acc0, gravity);
     RapidTrajectoryGenerator traj2(pos1, vel1, acc1, gravity);
     RapidTrajectoryGenerator traj3(pos2, vel2, acc2, gravity);
-    RapidTrajectoryGenerator traj4(pos3, vel3, acc3, gravity);
+    // RapidTrajectoryGenerator traj4(pos3, vel3, acc3, gravity);
     // RapidTrajectoryGenerator traj5(pos4, vel4, acc4, gravity);
 
     traj1.SetGoalPosition(pos1);
@@ -86,7 +91,7 @@ int main(int argc, char **argv)
     // traj.SetGoalVelocityInAxis(2,velf[2]);
 
     traj1.Generate(Tf);
-    traj2.Generate(0.5 * Tf);
+    traj2.Generate(Tf);
     traj3.Generate(Tf);
     // traj4.Generate(Tf);
     // traj5.Generate(Tf);
@@ -141,26 +146,26 @@ int main(int argc, char **argv)
             pos_cmd.yaw_dot = 0;
             //cout << pos_cmd.position.x << endl;
         }
-        else if (dt < 3 * Tf)
-        {
-            Vec3 Position = traj3.GetPosition(dt - 2 * Tf);
-            Vec3 Velocity = traj3.GetVelocity(dt - 2 * Tf);
-            Vec3 Acceleration = traj3.GetAcceleration(dt - 2 * Tf);
-            pos_cmd.position.x = Position[0];
-            pos_cmd.position.y = Position[1];
-            pos_cmd.position.z = Position[2];
-            //velocity
-            pos_cmd.velocity.x = Velocity[0];
-            pos_cmd.velocity.y = Velocity[1];
-            pos_cmd.velocity.z = Velocity[2];
-            //acceleration
-            pos_cmd.acceleration.x = Acceleration[0];
-            pos_cmd.acceleration.y = Acceleration[1];
-            pos_cmd.acceleration.z = Acceleration[2];
-            //yaw
-            pos_cmd.yaw = 0;
-            pos_cmd.yaw_dot = 0;
-        }
+        // else if (dt < 3 * Tf)
+        // {
+        //     Vec3 Position = traj3.GetPosition(dt - 2 * Tf);
+        //     Vec3 Velocity = traj3.GetVelocity(dt - 2 * Tf);
+        //     Vec3 Acceleration = traj3.GetAcceleration(dt - 2 * Tf);
+        //     pos_cmd.position.x = Position[0];
+        //     pos_cmd.position.y = Position[1];
+        //     pos_cmd.position.z = Position[2];
+        //     //velocity
+        //     pos_cmd.velocity.x = Velocity[0];
+        //     pos_cmd.velocity.y = Velocity[1];
+        //     pos_cmd.velocity.z = Velocity[2];
+        //     //acceleration
+        //     pos_cmd.acceleration.x = Acceleration[0];
+        //     pos_cmd.acceleration.y = Acceleration[1];
+        //     pos_cmd.acceleration.z = Acceleration[2];
+        //     //yaw
+        //     pos_cmd.yaw = 0;
+        //     pos_cmd.yaw_dot = 0;
+        // }
         // else if (dt < 4 * Tf)
         // {
         //     Vec3 Position = traj4.GetPosition(dt - 3 * Tf);

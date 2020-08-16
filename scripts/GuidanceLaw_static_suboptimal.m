@@ -2,17 +2,17 @@ clear all;    	  %清除所有内存变量
 %--------初始化制导系统参数------------------
 pi=3.141592653;
 g=9.8;
-Rmx=0;Rmy=2.5;                                 %无人机的位置
-Rtx=2; Rty=2;                                  %门的位置
-Vm=2;                                          %无人机的速度
-HeadError=10/180*pi;                           %指向角误差
+Rmx=0;Rmy=2;                                 %无人机的位置
+Rtx=3; Rty=3;                                  %门的位置
+Vm=3;                                          %无人机的速度
+HeadError=70/180*pi;                           %指向角误差
 
 AtMay=0*g;                                     %目标不机动
 AmMay=5*g;                                     %无人机的最大机动能力为5G
 
-M_= 5;
-N_= 2;
-SightAngle_desired = -10/180*pi;
+M_= 10;
+N_= 20;
+SightAngle_desired = 0/180*pi;
 
 %弹目几何运动学解算
 Rtmx=Rtx-Rmx;                                  %无人机和门x轴相对距离

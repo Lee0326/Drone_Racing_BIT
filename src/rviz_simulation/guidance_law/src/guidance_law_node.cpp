@@ -111,6 +111,8 @@ public:
         Vtdx_ = -Vdx_;
         Vtdz_ = -Vdz_;
         Vc_ = -(Rtdx_ * Vtdx_ + Rtdz_ * Vtdz_) / R_;
+        std::cout << "Sight Angle: " << sightAngle_ * 180 / PI << std::endl;
+        std::cout << "Sight Angle Derivative: " << sightAngle_dot_ * 180 / PI << std::endl;
         // // update the reference state
         // Vdx_ = Vdx_ + timestep_ * ax_;
         // Vdz_ = Vdx_ + timestep_ * az_;
