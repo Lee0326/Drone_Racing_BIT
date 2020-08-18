@@ -21,7 +21,7 @@
           <param name="max_acc" value="10.0" />
           <param name="Kp_x" value="8.0" />
           <param name="Kp_y" value="8.0" />
-          <param name="Kp_z" value="10.0" />
+          <param name="Kp_z" value="8.0" />
   </node>
 
   <include file="$(find mavros)/launch/node.launch">

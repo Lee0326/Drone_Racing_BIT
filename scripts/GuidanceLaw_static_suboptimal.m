@@ -3,16 +3,16 @@ clear all;    	  %清除所有内存变量
 pi=3.141592653;
 g=9.8;
 Rmx=0;Rmy=2;                                 %无人机的位置
-Rtx=3; Rty=3;                                  %门的位置
+Rtx=5; Rty=4;                                  %门的位置
 Vm=3;                                          %无人机的速度
-HeadError=70/180*pi;                           %指向角误差
+HeadError=-0.3805;                           %指向角误差
 
 AtMay=0*g;                                     %目标不机动
 AmMay=5*g;                                     %无人机的最大机动能力为5G
 
 M_= 10;
 N_= 20;
-SightAngle_desired = 0/180*pi;
+SightAngle_desired = -20/180*pi;
 
 %弹目几何运动学解算
 Rtmx=Rtx-Rmx;                                  %无人机和门x轴相对距离
@@ -78,10 +78,11 @@ Time=Time+TimeStep;
 
 %无人机
 %无人机加速度矢量垂直于视线
-Rmx=Rmx+TimeStep*Vmx;
-Rmy=Rmy+TimeStep*Vmy;
+
 Vmx=Vmx+TimeStep*Amx;
 Vmy=Vmy+TimeStep*Amy;
+Rmx=Rmx+TimeStep*Vmx;
+Rmy=Rmy+TimeStep*Vmy;
 Vm=sqrt(Vmy^2+Vmx^2);
 HeadError=HeadError+dHeadError*TimeStep;
 %无人机和门相对
@@ -152,8 +153,8 @@ ylabel('视线角速度(度每秒)');
 title('无人机与目标视线角速度曲线');
 
 figure(4)%无人机速度
-plot(time2(1:q),vm_sq(1:q),'b');
+plot(time2(1:q),dq1(1:q),'b');
 xlabel('时间(秒)');
-ylabel('无人机速度(米每秒)');
-title('无人机速度曲线');
+ylabel('视线角');
+title('视线角曲线');
 

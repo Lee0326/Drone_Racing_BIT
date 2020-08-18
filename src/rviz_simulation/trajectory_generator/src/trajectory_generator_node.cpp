@@ -211,7 +211,7 @@ int main(int argc, char **argv)
         //     dt = 0;
         //     trigger_time = ros::Time::now();
         // }
-
+        std::cout << "the acceleration in z axile: " << pos_cmd.acceleration.z << std::endl;
         pos_cmd.kx = {5, 5, 5};
         pos_cmd.kv = {5, 5, 5};
         posi_cmd_pub.publish(pos_cmd);

@@ -103,7 +103,6 @@ void geometricCtrl::targetCallback(const geometry_msgs::TwistStamped &msg)
 
 void geometricCtrl::flattargetCallback(const controller_msgs::FlatTarget &msg)
 {
-  velocity_yaw_ = true;
   reference_request_last_ = reference_request_now_;
 
   targetPos_prev_ = targetPos_;
@@ -115,6 +114,8 @@ void geometricCtrl::flattargetCallback(const controller_msgs::FlatTarget &msg)
   targetPos_ = toEigen(msg.position);
   targetVel_ = toEigen(msg.velocity);
 
+  if (mavVel_.norm() > 1)
+    velocity_yaw_ = true;
   if (msg.type_mask == 1)
   {
     targetAcc_ = toEigen(msg.acceleration);

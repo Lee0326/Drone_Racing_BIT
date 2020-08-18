@@ -7,6 +7,7 @@ void generateGlobaltrajectory(polynomial_trajectories::PolynomialTrajectory &tra
 {
     // setup all the waypoints
     std::vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d>> waypoints;
+    Eigen::Vector3d goal_init(0, 0, 2.0);
     Eigen::Vector3d goal_0(3.7, -0.4, 2.0);
     Eigen::Vector3d goal_1(5.2, -4.5, 1.3);
     Eigen::Vector3d goal_2(3.8, -9.2, 0.5);
@@ -18,6 +19,7 @@ void generateGlobaltrajectory(polynomial_trajectories::PolynomialTrajectory &tra
     Eigen::Vector3d goal_8(-3.9, -5.0, 1.6);
     Eigen::Vector3d goal_9(-1.4, 0.6, 0.5);
 
+    waypoints.push_back(goal_init);
     waypoints.push_back(goal_0);
     waypoints.push_back(goal_1);
     waypoints.push_back(goal_2);
@@ -44,9 +46,9 @@ void generateGlobaltrajectory(polynomial_trajectories::PolynomialTrajectory &tra
 
     ROS_INFO("Generating global trajectory through [%d] waypoints.", static_cast<int>(waypoints_filtered.size()));
     // Setup Parameters
-    double global_traj_max_v_ = 5.0;
-    double maximal_des_thrust = 12.0;
-    double maximal_roll_pitch_rate = 3;
+    double global_traj_max_v_ = 3.2;
+    double maximal_des_thrust = 10.0;
+    double maximal_roll_pitch_rate = 2.0;
     // Calculate segment times
     Eigen::VectorXd segment_times = Eigen::VectorXd::Ones(waypoints_filtered.size());
     Eigen::Vector3d last_filtered = waypoints_filtered.back();
