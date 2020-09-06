@@ -22,6 +22,7 @@
           <param name="Kp_x" value="10.0" />
           <param name="Kp_y" value="10.0" />
           <param name="Kp_z" value="12.0" />
+          <param name="init_pos_z" value="0.5" />
   </node>
 
   <include file="$(find mavros)/launch/node.launch">
