@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <sdf version="1.6">
   <model name="D435i">
-    <pose>0 0 0.015 0 0 0</pose>
+    <pose>0 0 0 0 0 0</pose>
     <link name="realsense_camera_link">
       <!-- 物理参数 -->
       <inertial>
@@ -29,7 +29,7 @@
       </visual>
       <!-- 传感器参数 -->
       <sensor name="color" type="camera">
-        <pose frame="">0 -0.0 0.004 0 0 0</pose>
+        <pose frame="">0 -0.0 0.0 0 0 0</pose>
         <camera name="realsense_camera">
           <!-- 水平视场角，90度 -->
           <horizontal_fov>1.047</horizontal_fov>
@@ -54,7 +54,7 @@
       </sensor>
       <!-- 左目 -->
       <sensor name="ired1" type="camera">
-        <pose frame="">0 -0.025 0.004 0 0 0</pose>
+        <pose frame="">0 -0.025 0.0 0 0 0</pose>
         <camera name="ired1">
           <horizontal_fov>1.047</horizontal_fov>
           <image>
@@ -78,7 +78,7 @@
       </sensor>
       <!-- 右目 -->
       <sensor name="ired2" type="camera">
-        <pose frame="">0 0.025 0.004 0 0 0</pose>
+        <pose frame="">0 0.025 0.0 0 0 0</pose>
         <camera name="ired2">
           <horizontal_fov>1.047</horizontal_fov>
           <image>
