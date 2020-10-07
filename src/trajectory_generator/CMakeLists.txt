@@ -27,6 +27,7 @@ include_directories("/usr/include/eigen3/")
 add_executable(${PROJECT_NAME}_node
     src/trajectory_point.cpp
     src/minimum_snap_trajectories_node.cpp
+#    src/minimum_snap_office_node.cpp
     src/constrained_polynomial_trajectories.cpp
     src/minimum_snap_trajectories.cpp
     src/polynomial_trajectories_common.cpp

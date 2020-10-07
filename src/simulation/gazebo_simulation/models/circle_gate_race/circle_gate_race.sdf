@@ -18,7 +18,7 @@
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://circle_gate_race/meshes/gate.dae</uri>
+            <uri>model://circle_gate_race/meshes/gate.stl</uri>
             <scale>0.6 0.6 0.6</scale>
           </mesh>
         </geometry>
@@ -27,7 +27,7 @@
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://circle_gate_race/meshes/gate.dae</uri>
+            <uri>model://circle_gate_race/meshes/gate.stl</uri>
             <scale>0.6 0.6 0.6</scale>
           </mesh>
         </geometry>

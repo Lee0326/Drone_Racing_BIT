@@ -148,8 +148,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -170,8 +170,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <material>
@@ -205,8 +205,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -227,8 +227,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <material>
@@ -263,8 +263,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -285,8 +285,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <material>
@@ -321,8 +321,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -343,8 +343,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <material>
@@ -378,8 +378,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -400,8 +400,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <material>
@@ -435,8 +435,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -457,8 +457,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <material>
@@ -493,8 +493,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -515,8 +515,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <material>
@@ -551,8 +551,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -573,8 +573,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <material>
@@ -608,8 +608,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -630,8 +630,8 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
-              <scale>0.8 0.8 0.8</scale>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <material>
@@ -665,7 +665,7 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
               <scale>1.2 1.2 1.2</scale>
             </mesh>
           </geometry>
@@ -687,7 +687,7 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://circle_gate_race/meshes/gate.dae</uri>
+              <uri>model://circle_gate_race/meshes/circle_gate_race.stl</uri>
               <scale>1.2 1.2 1.2</scale>
             </mesh>
           </geometry>

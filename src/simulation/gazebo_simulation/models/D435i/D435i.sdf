@@ -32,9 +32,9 @@
         <pose frame="">0 -0.0 0.0 0 0 0</pose>
         <camera name="realsense_camera">
           <!-- 水平视场角，90度 -->
-          <horizontal_fov>1.047</horizontal_fov>
+          <horizontal_fov>1.57</horizontal_fov>
           <image>
-            <width>640</width>
+            <width>720</width>
             <height>480</height>
             <format>RGB_INT8</format>
           </image>
