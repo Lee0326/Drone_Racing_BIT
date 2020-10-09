@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <sdf version="1.6">
-  <model name="D435i">
-    <pose>0 0 0 0 0 0</pose>
+  <model name="D435i_pose">
+    <pose>0 0 0.015 0 0 0</pose>
     <link name="realsense_camera_link">
       <!-- 物理参数 -->
       <inertial>
@@ -23,18 +23,18 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://D435i/meshes/D435i.dae</uri>
+            <uri>model://D435i_pose/meshes/D435i_pose.dae</uri>
           </mesh>
         </geometry>
       </visual>
       <!-- 传感器参数 -->
       <sensor name="color" type="camera">
-        <pose frame="">0 -0.0 0.0 0 0 0</pose>
+        <pose frame="">0 -0.0 0.004 0 0 0</pose>
         <camera name="realsense_camera">
           <!-- 水平视场角，90度 -->
-          <horizontal_fov>1.57</horizontal_fov>
+          <horizontal_fov>1.047</horizontal_fov>
           <image>
-            <width>720</width>
+            <width>640</width>
             <height>480</height>
             <format>RGB_INT8</format>
           </image>
@@ -54,7 +54,7 @@
       </sensor>
       <!-- 左目 -->
       <sensor name="ired1" type="camera">
-        <pose frame="">0 -0.025 0.0 0 0 0</pose>
+        <pose frame="">0 -0.025 0.004 0 0 0</pose>
         <camera name="ired1">
           <horizontal_fov>1.047</horizontal_fov>
           <image>
@@ -78,7 +78,7 @@
       </sensor>
       <!-- 右目 -->
       <sensor name="ired2" type="camera">
-        <pose frame="">0 0.025 0.0 0 0 0</pose>
+        <pose frame="">0 0.025 0.004 0 0 0</pose>
         <camera name="ired2">
           <horizontal_fov>1.047</horizontal_fov>
           <image>
@@ -167,5 +167,15 @@
     </link>
     <plugin name="realsense_plugin" filename="librealsense_gazebo_plugin.so">
     </plugin>
+    <plugin name="realsense_pose_plugin" filename="libgazebo_ros_p3d.so">
+    <alwaysOn>true</alwaysOn>
+    <updateRate>50.0</updateRate>
+    <bodyName>realsense_camera_link</bodyName>
+    <topicName>D435i_ground_truth/state</topicName>
+    <gaussianNoise>0.0</gaussianNoise>
+    <frameName>map</frameName>
+    <xyzOffsets>0 0 0</xyzOffsets>
+    <rpyOffsets>0 0 0</rpyOffsets>
+  </plugin>
   </model>
 </sdf>
