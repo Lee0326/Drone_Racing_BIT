@@ -17,20 +17,35 @@ class Synchronizer_ImgOdom
 {
 private:
     ros::NodeHandle nh_;
-    double x_;
-    double y_;
-    double z_;
+    double gate_x_;
+    double gate_y_;
+    double gate_z_;
+    double tdx_;
+    double tdy_;
+    double tdz_;
+    image_transport::ImageTransport it_;
+    image_transport::Publisher image_pub_;
 
 public:
-    Synchronizer_ImgOdom(ros::NodeHandle nh) : nh_(nh)
+    Synchronizer_ImgOdom(ros::NodeHandle nh) : nh_(nh), it_(nh)
     {
-        nh_.param<double>("gate_x", x_, 0.0);
-        nh_.param<double>("gate_y", y_, 0.0);
-        nh_.param<double>("gate_z", z_, 0.0);
+        nh_.param<double>("gate_x", gate_x_, 0.0);
+        nh_.param<double>("gate_y", gate_y_, 0.0);
+        nh_.param<double>("gate_z", gate_z_, 0.0);
+        image_pub_ = it_.advertise("/image_with_target_xyz/output", 1);
     }
     void callback(const ImageConstPtr &image, const nav_msgs::Odometry::ConstPtr &odom)
     {
-        std::cout << "image and odometry received!!" << std::endl;
+        double x = odom->pose.pose.position.x;
+        double y = odom->pose.pose.position.y;
+        double z = odom->pose.pose.position.z;
+        double vx = odom->twist.twist.linear.x;
+        double vy = odom->twist.twist.linear.y;
+        double vz = odom->twist.twist.linear.z;
+        tdx_ = x - gate_x_;
+        tdy_ = y - gate_y_;
+        tdz_ = z - gate_z_;
+        std::cout << "the relative distance in x direction is: " << tdx_ << std::endl;
     }
 };
 
