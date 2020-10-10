@@ -9,12 +9,15 @@ find_package(catkin REQUIRED COMPONENTS
     cv_bridge
     image_transport)
 
+find_package(Eigen3 REQUIRED)
+
 find_package(OpenCV REQUIRED)
 
 find_package(gazebo REQUIRED)
 
 include_directories(${catkin_INCLUDE_DIRS})
 include_directories(${GAZEBO_INCLUDE_DIRS})
+include_directories(${EIGEN3_INCLUDE_DIRS})
 
 catkin_package()
 
