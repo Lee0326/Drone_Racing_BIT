@@ -35,6 +35,7 @@ private:
     double fy_;
     double cx_;
     double cy_;
+    bool moving_;
     int i_;
     Eigen::Matrix3d K_;
     image_transport::ImageTransport it_;
@@ -62,6 +63,7 @@ public:
             0.0, fy_, cy_,
             0.0, 0.0, 1.0;
         i_ = 0;
+        moving_ = false;
     }
     ~Synchronizer_ImgOdom()
     {
@@ -80,6 +82,8 @@ public:
         double q_y = odom->pose.pose.orientation.y;
         double q_z = odom->pose.pose.orientation.z;
         double q_w = odom->pose.pose.orientation.w;
+        if (sqrt(vx * vx + vy * vy + vz * vz) > 0.5)
+            moving_ = true;
         Eigen::Quaterniond quaternion(q_w, q_x, q_y, q_z);
         tf::Quaternion quat;
         tf::quaternionMsgToTF(odom->pose.pose.orientation, quat);
@@ -112,19 +116,24 @@ public:
             return;
         }
         // std::cout << "the xyz is: " << t_gd_b[0] << " " << t_gd_b[1] << " " << t_gd_b[2] << std::endl;
-        // std::cout << "the u is: " << g_uv[0] << " the v is: " << g_uv[1] << std::endl;
+        //std::cout << "the u is: " << g_uv[0] << " the v is: " << g_uv[1] << std::endl;
         // std::cout << "the roll  angle is: " << eulerAngle[0] << std::endl;
         // std::cout << "the pitch angle is: " << eulerAngle[1] << std::endl;
         //std::cout << "the yaw by ROS angle is: " << yaw << std::endl;
         //std::cout << "the relative yaw between gate and drone is: " << gphi_ << std::endl;
+        std::cout << "current velocity: " << sqrt(vx * vx + vy * vy + vz * vz) << std::endl;
         auto img = cv_ptr->image;
-        cv::circle(cv_ptr->image, cv::Point(g_uv[0], g_uv[1]), 10, CV_RGB(0, 0, 255));
-        image_pub_.publish(cv_ptr->toImageMsg());
-
         // Write the ground truth file
-        std::string image_filename = "./results/" + std::to_string(i_) + ".jpg";
-        cv::imwrite(image_filename, img);
-        ground_truth_ << image_filename << " " << t_gd_b[0] << " " << t_gd_b[1] << " " << t_gd_b[2] << std::endl;
+        if ((abs(g_uv[0] - cx_) < 170) && (abs(g_uv[1] - cy_) < 170) && moving_)
+        {
+            std::string image_filename = "./results/" + std::to_string(i_) + ".jpg";
+            cv::imwrite(image_filename, img);
+            ground_truth_ << (std::to_string(i_) + ".jpg") << " " << t_gd_b[0] << " " << t_gd_b[1] << " " << t_gd_b[2] << " " << gphi_ << std::endl;
+            cv::circle(cv_ptr->image, cv::Point(g_uv[0], g_uv[1]), 10, CV_RGB(0, 0, 255));
+            i_ += 1;
+        }
+        image_pub_.publish(cv_ptr->toImageMsg());
+        moving_ = false;
     }
 };
 
