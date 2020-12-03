@@ -26,7 +26,7 @@ include_directories("/usr/include/eigen3/")
 
 add_executable(${PROJECT_NAME}_node
     src/trajectory_point.cpp
-    src/minimum_snap_trajectories_node.cpp
+#    src/minimum_snap_trajectories_node.cpp
 #    src/minimum_snap_office_node.cpp
     src/constrained_polynomial_trajectories.cpp
     src/minimum_snap_trajectories.cpp
@@ -35,6 +35,7 @@ add_executable(${PROJECT_NAME}_node
     src/geometry_eigen_conversions.cpp
     src/parameter_helper.cpp
     src/global_trajectory.cpp
+    src/minimum_snap_circle.cpp
 )
 add_dependencies(${PROJECT_NAME}_node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}_node
