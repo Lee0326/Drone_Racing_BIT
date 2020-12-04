@@ -1,6 +1,6 @@
 #include <ros/ros.h>
 #include "polynomial_trajectories/minimum_snap_trajectories.h"
-#include "drone_racing/global_trajectory.h"
+//#include "drone_racing/global_trajectory.h"
 #include "polynomial_trajectories/polynomial_trajectories_common.h"
 #include "controller_msgs/FlatTarget.h"
 void generateGlobaltrajectory(polynomial_trajectories::PolynomialTrajectory &trajectory)
@@ -8,9 +8,9 @@ void generateGlobaltrajectory(polynomial_trajectories::PolynomialTrajectory &tra
     // setup all the waypoints
     std::vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d>> waypoints;
     Eigen::Vector3d goal_init(0, 0, 0.5);
-    Eigen::Vector3d goal_0(1.5, 0, 0.5);
-    Eigen::Vector3d goal_1(1.0, 1.5, 0.5);
-    Eigen::Vector3d goal_2(0.0, 1.5, 0.5);
+    Eigen::Vector3d goal_0(1.3, 0, 0.5);
+    Eigen::Vector3d goal_1(1.3, 1.3, 0.5);
+    Eigen::Vector3d goal_2(0.0, 1.3, 0.5);
 
     waypoints.push_back(goal_init);
     waypoints.push_back(goal_0);

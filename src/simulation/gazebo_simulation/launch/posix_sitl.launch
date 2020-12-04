@@ -4,7 +4,7 @@
     <!-- launches PX4 SITL, Gazebo environment, and spawns vehicle -->
     <!-- vehicle pose -->
     <arg name="x" default="0"/>
-    <arg name="y" default="7"/>
+    <arg name="y" default="0"/>
     <arg name="z" default="0"/>
     <arg name="R" default="0"/>
     <arg name="P" default="0"/>
@@ -12,7 +12,7 @@
     <!-- vehicle model and world -->
     <arg name="est" default="ekf2"/>
     <arg name="vehicle" default="solo"/>
-    <arg name="world" default="$(find prometheus_gazebo)/worlds/empty.world"/>
+    <arg name="world" default="$(find drone_racing_simulation)/worlds/empty.world"/>
     <arg name="sdf" default="$(find drone_racing_simulation)/models/$(arg vehicle)/$(arg vehicle).sdf"/>
     <env name="PX4_SIM_MODEL" value="$(arg vehicle)" />
     <env name="PX4_ESTIMATOR" value="$(arg est)" />
