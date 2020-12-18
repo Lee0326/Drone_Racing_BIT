@@ -37,11 +37,13 @@ geometricCtrl::geometricCtrl(const ros::NodeHandle &nh, const ros::NodeHandle &n
   angularVelPub_ = nh_.advertise<mavros_msgs::AttitudeTarget>("command/bodyrate_command", 1);
   referencePosePub_ = nh_.advertise<geometry_msgs::PoseStamped>("reference/pose", 1);
   target_pose_pub_ = nh_.advertise<geometry_msgs::PoseStamped>("mavros/setpoint_position/local", 10);
+  target_velocity_pub_ = nh_.advertise<geometry_msgs::TwistStamped>("/mavros/setpoint_velocity/cmd_vel", 1);
   posehistoryPub_ = nh_.advertise<nav_msgs::Path>("geometric_controller/path", 10);
   systemstatusPub_ = nh_.advertise<mavros_msgs::CompanionProcessStatus>("mavros/companion_process/status", 1);
   arming_client_ = nh_.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
   set_mode_client_ = nh_.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
   land_service_ = nh_.advertiseService("land", &geometricCtrl::landCallback, this);
+  last_request_ = ros::Time::now();
 
   nh_private_.param<string>("mavname", mav_name_, "iris");
   nh_private_.param<int>("ctrl_mode", ctrl_mode_, ERROR_QUATERNION);
@@ -83,6 +85,15 @@ geometricCtrl::~geometricCtrl()
   // Destructor
 }
 
+float geometricCtrl::satfunc(float data, float Max)
+{
+
+  if (abs(data) > Max)
+    return (data > 0) ? Max : -Max;
+  else
+    return data;
+}
+
 void geometricCtrl::targetCallback(const geometry_msgs::TwistStamped &msg)
 {
   reference_request_last_ = reference_request_now_;
@@ -103,6 +114,7 @@ void geometricCtrl::targetCallback(const geometry_msgs::TwistStamped &msg)
 
 void geometricCtrl::flattargetCallback(const controller_msgs::FlatTarget &msg)
 {
+  node_state = MISSION_EXECUTION;
   reference_request_last_ = reference_request_now_;
 
   targetPos_prev_ = targetPos_;
@@ -208,8 +220,30 @@ void geometricCtrl::cmdloopCallback(const ros::TimerEvent &event)
   case WAITING_FOR_HOME_POSE:
     waitForPredicate(&received_home_pose, "Waiting for home pose...");
     ROS_INFO("Got pose! Drone Ready to be armed.");
-    node_state = MISSION_EXECUTION;
+    //node_state = MISSION_EXECUTION;
+    node_state = TAKING_OFF;
     break;
+
+  case TAKING_OFF:
+  {
+    geometry_msgs::PoseStamped takingoff_msg;
+    takingoff_msg.header.stamp = ros::Time::now();
+    takingoff_msg.pose.position.x = initTargetPos_x_;
+    takingoff_msg.pose.position.y = initTargetPos_y_;
+    takingoff_msg.pose.position.z = initTargetPos_z_;
+    target_pose_pub_.publish(takingoff_msg);
+
+    const Eigen::Vector3d pos_error = mavPos_ - targetPos_;
+    geometry_msgs::TwistStamped takingoff_vel_msg;
+    Eigen::Vector3d vel_cmd = Kpos_.asDiagonal() * pos_error;
+    takingoff_vel_msg.header.stamp = ros::Time::now();
+    takingoff_vel_msg.twist.linear.x = satfunc(vel_cmd(0), max_takingoff_vel_);
+    takingoff_vel_msg.twist.linear.y = satfunc(vel_cmd(1), max_takingoff_vel_);
+    takingoff_vel_msg.twist.linear.z = satfunc(vel_cmd(2), max_takingoff_vel_);
+    target_velocity_pub_.publish(takingoff_vel_msg);
+    ros::spinOnce();
+    break;
+  }
 
   case MISSION_EXECUTION:
     if (!feedthrough_enable_)
@@ -248,7 +282,7 @@ void geometricCtrl::statusloopCallback(const ros::TimerEvent &event)
     // This is only run if the vehicle is simulated
     arm_cmd_.request.value = true;
     offb_set_mode_.request.custom_mode = "OFFBOARD";
-    if (current_state_.mode != "OFFBOARD" && (ros::Time::now() - last_request_ > ros::Duration(5.0)))
+    if (current_state_.mode != "OFFBOARD" && (ros::Time::now() - last_request_ > ros::Duration(2.0)))
     {
       if (set_mode_client_.call(offb_set_mode_) && offb_set_mode_.response.mode_sent)
       {
@@ -258,7 +292,7 @@ void geometricCtrl::statusloopCallback(const ros::TimerEvent &event)
     }
     else
     {
-      if (!current_state_.armed && (ros::Time::now() - last_request_ > ros::Duration(5.0)))
+      if (!current_state_.armed && (ros::Time::now() - last_request_ > ros::Duration(2.0)))
       {
         if (arming_client_.call(arm_cmd_) && arm_cmd_.response.success)
         {
@@ -364,7 +398,7 @@ void geometricCtrl::computeBodyRateCmd(Eigen::Vector4d &bodyrate_cmd, const Eige
 
   const Eigen::Vector3d pos_error = mavPos_ - target_pos;
   const Eigen::Vector3d vel_error = mavVel_ - target_vel;
-
+  std::cout << "the position error is: " << pos_error(2) << std::endl;
   Eigen::Vector3d a_fb =
       Kpos_.asDiagonal() * pos_error + Kvel_.asDiagonal() * vel_error; // feedforward term for trajectory error
   if (a_fb.norm() > max_fb_acc_)
