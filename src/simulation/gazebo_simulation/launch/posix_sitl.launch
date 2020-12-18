@@ -11,7 +11,7 @@
     <arg name="Y" default="0"/>
     <!-- vehicle model and world -->
     <arg name="est" default="ekf2"/>
-    <arg name="vehicle" default="solo"/>
+    <arg name="vehicle" default="iris"/>
     <arg name="world" default="$(find drone_racing_simulation)/worlds/empty.world"/>
     <arg name="sdf" default="$(find drone_racing_simulation)/models/$(arg vehicle)/$(arg vehicle).sdf"/>
     <env name="PX4_SIM_MODEL" value="$(arg vehicle)" />
