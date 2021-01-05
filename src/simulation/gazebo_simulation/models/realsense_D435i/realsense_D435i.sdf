@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <model name="realsense_D435i">
+    <pose>0 0 0.015 0 0 0</pose>
+    <link name="realsense_camera_link">
+      <!-- 物理参数 -->
+      <inertial>
+        <mass>0.001</mass>
+        <inertia>
+          <ixx>0.000001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000001</iyy>
+          <iyz>0</iyz>
+          <izz>0.000001</izz>
+        </inertia>
+      </inertial>
+      <self_collide>0</self_collide>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+      <gravity>1</gravity>
+      <!-- 显示参数 -->
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://realsense_D435i/meshes/D435i_pose.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <!-- 传感器参数 -->
+      <sensor name="color" type="camera">
+        <pose frame="">0 -0.0 0.004 0 0 0</pose>
+        <camera name="realsense_camera">
+          <!-- 水平视场角，90度 -->
+          <horizontal_fov>1.047</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>RGB_INT8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>60</update_rate>
+        <visualize>1</visualize>
+      </sensor>
+      <!-- 左目 -->
+      <sensor name="ired1" type="camera">
+        <pose frame="">0 -0.025 0.004 0 0 0</pose>
+        <camera name="ired1">
+          <horizontal_fov>1.047</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>L_INT8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>60</update_rate>
+        <visualize>0</visualize>
+      </sensor>
+      <!-- 右目 -->
+      <sensor name="ired2" type="camera">
+        <pose frame="">0 0.025 0.004 0 0 0</pose>
+        <camera name="ired2">
+          <horizontal_fov>1.047</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>L_INT8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.001</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>60</update_rate>
+        <visualize>0</visualize>
+      </sensor>
+      <!-- 深度相机 -->
+      <sensor name="depth" type="depth">
+        <pose frame="">0 -0.0 0.004 0 0 0</pose>
+        <camera name="depth_camera">
+          <horizontal_fov>1.047</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>60</update_rate>
+        <visualize>0</visualize>
+      </sensor>
+    </link>
+
+    <link name="depth_optical_frame">
+      <pose>0.0 0 0 -1.570796 0 -1.570796</pose>
+      <!-- 物理参数 -->
+      <inertial>
+        <mass>0.0001</mass>
+        <inertia>
+          <ixx>0.000001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000001</iyy>
+          <iyz>0</iyz>
+          <izz>0.000001</izz>
+        </inertia>
+      </inertial>
+      <self_collide>0</self_collide>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+      <gravity>1</gravity>
+
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.01 0.01 0.01</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>0.01 0.01 0.01</size>
+          </box>
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="camera_joint" type="fixed">
+      <child>realsense_camera_link</child>
+      <parent>depth_optical_frame</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+        </limit>
+      </axis>
+    </joint>
+
+  <plugin name="realsense_plugin" filename="librealsense_gazebo_plugin.so">
+    </plugin>
+  <plugin name="realsense_pose_plugin" filename="libgazebo_ros_p3d.so">
+    <alwaysOn>true</alwaysOn>
+    <updateRate>50.0</updateRate>
+    <bodyName>depth_optical_frame</bodyName>
+    <topicName>D435i/depth/odom</topicName>
+    <gaussianNoise>0.0</gaussianNoise>
+    <frameName>world</frameName>
+    <xyzOffsets>0 0 0</xyzOffsets>
+    <rpyOffsets>0 0 0</rpyOffsets>
+  </plugin>
+  </model>
+</sdf>
