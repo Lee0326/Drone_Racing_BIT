@@ -508,11 +508,11 @@
       <accelerometerTurnOnBiasSigma>0.196</accelerometerTurnOnBiasSigma>
     </plugin>
     <include>
-      <uri>model://D435i_pose</uri>
+      <uri>model://realsense_D435i</uri>
       <pose>0.2 0 -0.1 0 0 0</pose>
     </include>
     <joint name="D435i_joint" type="fixed">
-      <child>D435i_pose::realsense_camera_link</child>
+      <child>realsense_D435i::realsense_camera_link</child>
       <parent>solo::base_link</parent>
       <axis>
         <xyz>0 0 1</xyz>

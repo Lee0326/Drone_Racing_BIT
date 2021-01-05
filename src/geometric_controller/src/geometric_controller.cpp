@@ -18,6 +18,10 @@ geometricCtrl::geometricCtrl(const ros::NodeHandle &nh, const ros::NodeHandle &n
       nh_.subscribe("reference/setpoint", 1, &geometricCtrl::targetCallback, this, ros::TransportHints().tcpNoDelay());
   flatreferenceSub_ = nh_.subscribe("reference/flatsetpoint", 1, &geometricCtrl::flattargetCallback, this,
                                     ros::TransportHints().tcpNoDelay());
+  quadcmdSub_ =
+      nh_.subscribe("planning/pos_cmd", 1, &geometricCtrl::quadmsgCallback, this, ros::TransportHints().tcpNoDelay());
+  flatreferenceSub_ = nh_.subscribe("reference/flatsetpoint", 1, &geometricCtrl::flattargetCallback, this,
+                                    ros::TransportHints().tcpNoDelay());
   yawreferenceSub_ =
       nh_.subscribe("reference/yaw", 1, &geometricCtrl::yawtargetCallback, this, ros::TransportHints().tcpNoDelay());
   multiDOFJointSub_ = nh_.subscribe("command/trajectory", 1, &geometricCtrl::multiDOFJointCallback, this,
@@ -112,6 +116,26 @@ void geometricCtrl::targetCallback(const geometry_msgs::TwistStamped &msg)
     targetAcc_ = Eigen::Vector3d::Zero();
 }
 
+void geometricCtrl::quadmsgCallback(const quadrotor_msgs::PositionCommand::ConstPtr &cmd)
+{
+  node_state = MISSION_EXECUTION;
+  reference_request_last_ = reference_request_now_;
+
+  targetPos_prev_ = targetPos_;
+  targetVel_prev_ = targetVel_;
+
+  reference_request_now_ = ros::Time::now();
+  reference_request_dt_ = (reference_request_now_ - reference_request_last_).toSec();
+
+  targetPos_ = Eigen::Vector3d(cmd->position.x, cmd->position.y, cmd->position.z);
+  targetVel_ = Eigen::Vector3d(cmd->velocity.x, cmd->velocity.y, cmd->velocity.z);
+  targetAcc_ = Eigen::Vector3d(cmd->acceleration.x, cmd->acceleration.y,
+                               cmd->acceleration.z);
+  targetJerk_ = Eigen::Vector3d::Zero();
+  targetSnap_ = Eigen::Vector3d::Zero();
+  mavYaw_ = double(cmd->yaw);
+}
+
 void geometricCtrl::flattargetCallback(const controller_msgs::FlatTarget &msg)
 {
   node_state = MISSION_EXECUTION;
@@ -127,31 +151,31 @@ void geometricCtrl::flattargetCallback(const controller_msgs::FlatTarget &msg)
   targetVel_ = toEigen(msg.velocity);
 
   if (mavVel_.norm() > 1)
-    velocity_yaw_ = true;
-  if (msg.type_mask == 1)
-  {
-    targetAcc_ = toEigen(msg.acceleration);
-    targetJerk_ = toEigen(msg.jerk);
-    targetSnap_ = Eigen::Vector3d::Zero();
-  }
-  else if (msg.type_mask == 2)
-  {
-    targetAcc_ = Eigen::Vector3d::Zero();
-    targetJerk_ = Eigen::Vector3d::Zero();
-    targetSnap_ = Eigen::Vector3d::Zero();
-  }
-  else if (msg.type_mask == 4)
-  {
-    targetAcc_ = Eigen::Vector3d::Zero();
-    targetJerk_ = Eigen::Vector3d::Zero();
-    targetSnap_ = Eigen::Vector3d::Zero();
-  }
-  else
-  {
-    targetAcc_ = toEigen(msg.acceleration);
-    targetJerk_ = toEigen(msg.jerk);
-    targetSnap_ = toEigen(msg.snap);
-  }
+    //velocity_yaw_ = true;
+    if (msg.type_mask == 1)
+    {
+      targetAcc_ = toEigen(msg.acceleration);
+      targetJerk_ = toEigen(msg.jerk);
+      targetSnap_ = Eigen::Vector3d::Zero();
+    }
+    else if (msg.type_mask == 2)
+    {
+      targetAcc_ = toEigen(msg.acceleration);
+      targetJerk_ = Eigen::Vector3d::Zero();
+      targetSnap_ = Eigen::Vector3d::Zero();
+    }
+    else if (msg.type_mask == 4)
+    {
+      targetAcc_ = Eigen::Vector3d::Zero();
+      targetJerk_ = Eigen::Vector3d::Zero();
+      targetSnap_ = Eigen::Vector3d::Zero();
+    }
+    else
+    {
+      targetAcc_ = toEigen(msg.acceleration);
+      targetJerk_ = toEigen(msg.jerk);
+      targetSnap_ = toEigen(msg.snap);
+    }
 }
 
 void geometricCtrl::yawtargetCallback(const std_msgs::Float32 &msg)
@@ -248,6 +272,7 @@ void geometricCtrl::cmdloopCallback(const ros::TimerEvent &event)
   case MISSION_EXECUTION:
     if (!feedthrough_enable_)
       computeBodyRateCmd(cmdBodyRate_, targetPos_, targetVel_, targetAcc_);
+    // std::cout << targetAcc_[0] << " " << targetAcc_[1] << " " << targetAcc_[2] << std::endl;
     pubReferencePose(targetPos_, q_des);
     pubRateCommands(cmdBodyRate_);
     appendPoseHistory();

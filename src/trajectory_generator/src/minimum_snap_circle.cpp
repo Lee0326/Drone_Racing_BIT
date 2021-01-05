@@ -8,9 +8,9 @@ void generateGlobaltrajectory(polynomial_trajectories::PolynomialTrajectory &tra
     // setup all the waypoints
     std::vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d>> waypoints;
     Eigen::Vector3d goal_init(0, 0, 1.0);
-    Eigen::Vector3d goal_0(1.3, 0, 0.7);
-    Eigen::Vector3d goal_1(1.3, 1.3, 1.0);
-    Eigen::Vector3d goal_2(0.0, 1.3, 0.7);
+    Eigen::Vector3d goal_0(1.5, 0, 1.0);
+    Eigen::Vector3d goal_1(1.5, 1.5, 1.0);
+    Eigen::Vector3d goal_2(0.0, 1.5, 1.0);
 
     waypoints.push_back(goal_init);
     waypoints.push_back(goal_0);
@@ -34,8 +34,8 @@ void generateGlobaltrajectory(polynomial_trajectories::PolynomialTrajectory &tra
     ROS_INFO("Generating global trajectory through [%d] waypoints.", static_cast<int>(waypoints_filtered.size()));
     // Setup Parameters
     double global_traj_max_v_ = 2.5;
-    double maximal_des_thrust = 9.85;
-    double maximal_roll_pitch_rate = 1.5;
+    double maximal_des_thrust = 10.0;
+    double maximal_roll_pitch_rate = 1.6;
     // Calculate segment times
     Eigen::VectorXd segment_times = Eigen::VectorXd::Ones(waypoints_filtered.size());
     Eigen::Vector3d last_filtered = waypoints_filtered.back();
@@ -86,10 +86,16 @@ int main(int argc, char **argv)
     polynomial_trajectories::PolynomialTrajectory trajectory;
     generateGlobaltrajectory(trajectory);
     auto trigger_time = ros::Time::now();
+    bool first_position = false;
     while (ros::ok())
     {
         auto curr_time = ros::Time::now();
         auto state = polynomial_trajectories::getPointFromTrajectory(trajectory, curr_time - trigger_time);
+        if (!first_position)
+        {
+            std::cout << state.position(0) << " " << state.position(1) << " " << state.position(2) << std::endl;
+            first_position = true;
+        }
         pubflatrefState(state, flatreferencePub);
         ros::spinOnce();
     }
