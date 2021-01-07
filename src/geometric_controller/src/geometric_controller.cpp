@@ -33,6 +33,7 @@ geometricCtrl::geometricCtrl(const ros::NodeHandle &nh, const ros::NodeHandle &n
   mavtwistSub_ = nh_.subscribe("mavros/local_position/velocity_local", 1, &geometricCtrl::mavtwistCallback, this,
                                ros::TransportHints().tcpNoDelay());
   ctrltriggerServ_ = nh_.advertiseService("tigger_rlcontroller", &geometricCtrl::ctrltriggerCallback, this);
+
   cmdloop_timer_ = nh_.createTimer(ros::Duration(0.01), &geometricCtrl::cmdloopCallback,
                                    this); // Define timer for constant loop rate
   statusloop_timer_ = nh_.createTimer(ros::Duration(1), &geometricCtrl::statusloopCallback,
@@ -257,19 +258,23 @@ void geometricCtrl::cmdloopCallback(const ros::TimerEvent &event)
     takingoff_msg.pose.position.z = initTargetPos_z_;
     target_pose_pub_.publish(takingoff_msg);
 
-    const Eigen::Vector3d pos_error = mavPos_ - targetPos_;
-    geometry_msgs::TwistStamped takingoff_vel_msg;
-    Eigen::Vector3d vel_cmd = Kpos_.asDiagonal() * pos_error;
-    takingoff_vel_msg.header.stamp = ros::Time::now();
-    takingoff_vel_msg.twist.linear.x = satfunc(vel_cmd(0), max_takingoff_vel_);
-    takingoff_vel_msg.twist.linear.y = satfunc(vel_cmd(1), max_takingoff_vel_);
-    takingoff_vel_msg.twist.linear.z = satfunc(vel_cmd(2), max_takingoff_vel_);
-    target_velocity_pub_.publish(takingoff_vel_msg);
+    // const Eigen::Vector3d pos_error = mavPos_ - targetPos_;
+    // geometry_msgs::TwistStamped takingoff_vel_msg;
+    // Eigen::Vector3d vel_cmd = Kpos_.asDiagonal() * pos_error;
+    // takingoff_vel_msg.header.stamp = ros::Time::now();
+    // takingoff_vel_msg.twist.linear.x = satfunc(vel_cmd(0), max_takingoff_vel_);
+    // takingoff_vel_msg.twist.linear.y = satfunc(vel_cmd(1), max_takingoff_vel_);
+    // takingoff_vel_msg.twist.linear.z = satfunc(vel_cmd(2), max_takingoff_vel_);
+    // target_velocity_pub_.publish(takingoff_vel_msg);
+
+    // cout << " target_velocity_pub_  publish!!" << endl;
     ros::spinOnce();
     break;
   }
 
   case MISSION_EXECUTION:
+
+    // cout << " this is MISSION_EXECUTION!!" << endl;
     if (!feedthrough_enable_)
       computeBodyRateCmd(cmdBodyRate_, targetPos_, targetVel_, targetAcc_);
     // std::cout << targetAcc_[0] << " " << targetAcc_[1] << " " << targetAcc_[2] << std::endl;
@@ -414,9 +419,9 @@ void geometricCtrl::computeBodyRateCmd(Eigen::Vector4d &bodyrate_cmd, const Eige
   /// Compute BodyRate commands using differential flatness
   /// Controller based on Faessler 2017
   const Eigen::Vector3d a_ref = target_acc;
-  if (velocity_yaw_)
+  if (velocity_yaw_) 
   {
-    mavYaw_ = getVelocityYaw(mavVel_);
+    mavYaw_ = getVelocityYaw(mavVel_);// 根据速度方向确定偏航角
   }
   const Eigen::Vector4d q_ref = acc2quaternion(a_ref - g_, mavYaw_);
   const Eigen::Matrix3d R_ref = quat2RotMatrix(q_ref);
