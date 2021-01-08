@@ -4,7 +4,7 @@
   <arg name="gcs_url" default="" />
   <arg name="tgt_system" default="1" />
   <arg name="tgt_component" default="1" />
-  <arg name="command_input" default="1" />
+  <arg name="command_input" default="2" />
   <arg name="gazebo_simulation" default="true" />
   <arg name="visualization" default="true"/>
   <arg name="log_output" default="screen" />
@@ -27,10 +27,13 @@
 	      <param name="velocity_yaw" value="false" />
       	  <param name="yaw_heading" value="0.0" />
           <param name="max_acc" value="10.0" />
-          <param name="Kp_x" value="3.0" />
-          <param name="Kp_y" value="3.0" />
-          <param name="Kp_z" value="3.0" />
-          <param name="attctrl_constant" value="0.1" />
+          <param name="Kp_x" value="8.0" />
+          <param name="Kp_y" value="8.0" />
+          <param name="Kp_z" value="8.0" />
+          <param name="Kv_x" value="2.0" />
+          <param name="Kv_y" value="2.0" />
+          <param name="Kv_z" value="2.0" />
+          <param name="attctrl_constant" value="0.2" />
           <param name="init_pos_x" value="0" />
           <param name="init_pos_y" value="0" />
           <param name="init_pos_z" value="1.0" />

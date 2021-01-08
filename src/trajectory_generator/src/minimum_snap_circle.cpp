@@ -7,10 +7,10 @@ void generateGlobaltrajectory(polynomial_trajectories::PolynomialTrajectory &tra
 {
     // setup all the waypoints
     std::vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d>> waypoints;
-    Eigen::Vector3d goal_init(0, 0, 1.0);
-    Eigen::Vector3d goal_0(1.5, 0, 1.0);
-    Eigen::Vector3d goal_1(1.5, 1.5, 1.0);
-    Eigen::Vector3d goal_2(0.0, 1.5, 1.0);
+    Eigen::Vector3d goal_init(0, 0, 2.0);
+    Eigen::Vector3d goal_0(1.5, 0, 2.0);
+    Eigen::Vector3d goal_1(1.5, 1.5, 2.0);
+    Eigen::Vector3d goal_2(0.0, 1.5, 2.0);
 
     waypoints.push_back(goal_init);
     waypoints.push_back(goal_0);
