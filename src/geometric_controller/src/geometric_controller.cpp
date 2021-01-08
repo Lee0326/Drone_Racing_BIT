@@ -67,7 +67,7 @@ geometricCtrl::geometricCtrl(const ros::NodeHandle &nh, const ros::NodeHandle &n
   nh_private_.param<double>("Kp_z", Kpos_z_, 10.0);
   nh_private_.param<double>("Kv_x", Kvel_x_, 1.5);
   nh_private_.param<double>("Kv_y", Kvel_y_, 1.5);
-  nh_private_.param<double>("Kv_z", Kvel_z_, 3.3);
+  nh_private_.param<double>("Kv_z", Kvel_z_, 1.5);
   nh_private_.param<int>("posehistory_window", posehistory_window_, 200);
   nh_private_.param<double>("init_pos_x", initTargetPos_x_, 0.0);
   nh_private_.param<double>("init_pos_y", initTargetPos_y_, 0.0);
@@ -135,6 +135,7 @@ void geometricCtrl::quadmsgCallback(const quadrotor_msgs::PositionCommand::Const
   targetJerk_ = Eigen::Vector3d::Zero();
   targetSnap_ = Eigen::Vector3d::Zero();
   mavYaw_ = double(cmd->yaw);
+  //cmdBodyRate_[2] = cmd->yaw_dot;
 }
 
 void geometricCtrl::flattargetCallback(const controller_msgs::FlatTarget &msg)
@@ -257,7 +258,6 @@ void geometricCtrl::cmdloopCallback(const ros::TimerEvent &event)
     takingoff_msg.pose.position.y = initTargetPos_y_;
     takingoff_msg.pose.position.z = initTargetPos_z_;
     target_pose_pub_.publish(takingoff_msg);
-
     // const Eigen::Vector3d pos_error = mavPos_ - targetPos_;
     // geometry_msgs::TwistStamped takingoff_vel_msg;
     // Eigen::Vector3d vel_cmd = Kpos_.asDiagonal() * pos_error;
@@ -266,8 +266,6 @@ void geometricCtrl::cmdloopCallback(const ros::TimerEvent &event)
     // takingoff_vel_msg.twist.linear.y = satfunc(vel_cmd(1), max_takingoff_vel_);
     // takingoff_vel_msg.twist.linear.z = satfunc(vel_cmd(2), max_takingoff_vel_);
     // target_velocity_pub_.publish(takingoff_vel_msg);
-
-    // cout << " target_velocity_pub_  publish!!" << endl;
     ros::spinOnce();
     break;
   }
@@ -548,7 +546,7 @@ Eigen::Vector4d geometricCtrl::attcontroller(const Eigen::Vector4d &ref_att, con
   qe = quatMultiplication(q_inv, ref_att);
   ratecmd(0) = (2.0 / attctrl_tau_) * std::copysign(1.0, qe(0)) * qe(1);
   ratecmd(1) = (2.0 / attctrl_tau_) * std::copysign(1.0, qe(0)) * qe(2);
-  ratecmd(2) = (2.0 / attctrl_tau_) * std::copysign(1.0, qe(0)) * qe(3);
+  ratecmd(2) = (0.5 / attctrl_tau_) * std::copysign(1.0, qe(0)) * qe(3);
   rotmat = quat2RotMatrix(mavAtt_);
   zb = rotmat.col(2);
   ratecmd(3) =
