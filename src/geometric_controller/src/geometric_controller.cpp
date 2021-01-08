@@ -71,7 +71,7 @@ geometricCtrl::geometricCtrl(const ros::NodeHandle &nh, const ros::NodeHandle &n
   nh_private_.param<int>("posehistory_window", posehistory_window_, 200);
   nh_private_.param<double>("init_pos_x", initTargetPos_x_, 0.0);
   nh_private_.param<double>("init_pos_y", initTargetPos_y_, 0.0);
-  nh_private_.param<double>("init_pos_z", initTargetPos_z_, 2.0);
+  nh_private_.param<double>("init_pos_z", initTargetPos_z_, 1.0);
 
   targetPos_ << initTargetPos_x_, initTargetPos_y_, initTargetPos_z_; // Initial Position
   targetVel_ << 0.0, 0.0, 0.0;
@@ -335,6 +335,7 @@ void geometricCtrl::statusloopCallback(const ros::TimerEvent &event)
   pubSystemStatus();
 }
 
+//用于 rviz 显示
 void geometricCtrl::pubReferencePose(const Eigen::Vector3d &target_position, const Eigen::Vector4d &target_attitude)
 {
   geometry_msgs::PoseStamped msg;
@@ -437,9 +438,10 @@ void geometricCtrl::computeBodyRateCmd(Eigen::Vector4d &bodyrate_cmd, const Eige
   const Eigen::Vector3d a_rd = R_ref * D_.asDiagonal() * R_ref.transpose() * target_vel; // Rotor drag
   const Eigen::Vector3d a_des = a_fb + a_ref - a_rd - g_;
 
+  // world系到机体系的旋转矩阵的四元数表示(期望姿态)
   q_des = acc2quaternion(a_des, mavYaw_);
 
-  if (ctrl_mode_ == ERROR_GEOMETRIC)
+  if (ctrl_mode_ == ERROR_GEOMETRIC) //ctrl_mode_ = 2
   {
     bodyrate_cmd = geometric_attcontroller(q_des, a_des, mavAtt_); // Calculate BodyRate
   }
@@ -576,7 +578,7 @@ Eigen::Vector4d geometricCtrl::geometric_attcontroller(const Eigen::Vector4d &re
   ratecmd.head(3) = (2.0 / attctrl_tau_) * error_att;
   rotmat = quat2RotMatrix(mavAtt_);
   zb = rotmat.col(2);
-  ratecmd(3) =
+  ratecmd(3) = 
       std::max(0.0, std::min(1.0, norm_thrust_const_ * ref_acc.dot(zb) + norm_thrust_offset_)); // Calculate thrust
 
   return ratecmd;
