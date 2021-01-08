@@ -284,20 +284,47 @@ void geometricCtrl::cmdloopCallback(const ros::TimerEvent &event)
 
   case LANDING:
   {
-    geometry_msgs::PoseStamped landingmsg;
-    landingmsg.header.stamp = ros::Time::now();
-    landingmsg.pose = home_pose_;
-    landingmsg.pose.position.z = landingmsg.pose.position.z + 1.0;
-    target_pose_pub_.publish(landingmsg);
-    node_state = LANDED;
+    if(autoland())
+      node_state = LANDED;
     ros::spinOnce();
     break;
   }
   case LANDED:
     ROS_INFO("Landed. Please set to position control and disarm.");
+
     cmdloop_timer_.stop();
     break;
   }
+}
+
+bool geometricCtrl::autoland()
+{
+  geometry_msgs::PoseStamped landingmsg;
+  if(mavPos_(2)<=0.3)
+  {
+    if (current_state_.mode != "AUTO.LAND")
+    {
+      offb_set_mode_.request.custom_mode = "AUTO.LAND";
+      if (set_mode_client_.call(offb_set_mode_) && offb_set_mode_.response.mode_sent)
+      {
+        ROS_INFO("AUTO.LAN enabled");
+        return true;
+      }
+    }
+  }
+  else
+  {
+    landingmsg.header.stamp = ros::Time::now();
+    landingmsg.pose.position.z = 0.15;
+    landingmsg.pose.position.x = mavPos_(0);
+    landingmsg.pose.position.y = mavPos_(1);
+    landingmsg.pose.orientation.w = mavAtt_(0);
+    landingmsg.pose.orientation.x = mavAtt_(1);
+    landingmsg.pose.orientation.y = mavAtt_(2);
+    landingmsg.pose.orientation.z = mavAtt_(3);
+    target_pose_pub_.publish(landingmsg);
+  }
+  return false;
 }
 
 void geometricCtrl::mavstateCallback(const mavros_msgs::State::ConstPtr &msg) { current_state_ = *msg; }
