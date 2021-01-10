@@ -1,0 +1,33 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/linux/work/Drone_Racing_BIT/devel/include/**",
+                "/home/linux/work/driver/bebop_ws/devel/include/**",
+                "/opt/ros/melodic/include/**",
+                "/home/linux/work/driver/bebop_ws/src/bebop_autonomy/bebop_driver/include/**",
+                "/home/linux/work/Drone_Racing_BIT/src/controller_msgs/include/**",
+                "/home/linux/work/Drone_Racing_BIT/src/simulation/rviz_simulation/drone_planning/include/**",
+                "/home/linux/work/Drone_Racing_BIT/src/geometric_controller/include/**",
+                "/home/linux/work/Drone_Racing_BIT/src/trajectory_generator/include/**",
+                "/home/linux/work/Drone_Racing_BIT/src/simulation/rviz_simulation/Utils/pose_utils/include/**",
+                "/home/linux/work/Drone_Racing_BIT/src/simulation/rviz_simulation/Utils/quadrotor_msgs/include/**",
+                "/home/linux/work/Drone_Racing_BIT/src/simulation/rviz_simulation/so3_control/include/**",
+                "/home/linux/work/Drone_Racing_BIT/src/simulation/rviz_simulation/so3_quadrotor_simulator/include/**",
+                "/home/linux/work/Drone_Racing_BIT/src/simulation/rviz_simulation/trajectory_generator/include/**",
+                "/home/linux/work/Drone_Racing_BIT/src/simulation/rviz_simulation/Utils/uav_utils/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++14"
+        }
+    ],
+    "version": 4
+}

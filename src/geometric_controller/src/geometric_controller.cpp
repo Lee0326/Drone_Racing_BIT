@@ -33,6 +33,7 @@ geometricCtrl::geometricCtrl(const ros::NodeHandle &nh, const ros::NodeHandle &n
   mavtwistSub_ = nh_.subscribe("mavros/local_position/velocity_local", 1, &geometricCtrl::mavtwistCallback, this,
                                ros::TransportHints().tcpNoDelay());
   ctrltriggerServ_ = nh_.advertiseService("tigger_rlcontroller", &geometricCtrl::ctrltriggerCallback, this);
+
   cmdloop_timer_ = nh_.createTimer(ros::Duration(0.01), &geometricCtrl::cmdloopCallback,
                                    this); // Define timer for constant loop rate
   statusloop_timer_ = nh_.createTimer(ros::Duration(1), &geometricCtrl::statusloopCallback,
@@ -70,7 +71,7 @@ geometricCtrl::geometricCtrl(const ros::NodeHandle &nh, const ros::NodeHandle &n
   nh_private_.param<int>("posehistory_window", posehistory_window_, 200);
   nh_private_.param<double>("init_pos_x", initTargetPos_x_, 0.0);
   nh_private_.param<double>("init_pos_y", initTargetPos_y_, 0.0);
-  nh_private_.param<double>("init_pos_z", initTargetPos_z_, 2.0);
+  nh_private_.param<double>("init_pos_z", initTargetPos_z_, 1.0);
 
   targetPos_ << initTargetPos_x_, initTargetPos_y_, initTargetPos_z_; // Initial Position
   targetVel_ << 0.0, 0.0, 0.0;
@@ -270,6 +271,8 @@ void geometricCtrl::cmdloopCallback(const ros::TimerEvent &event)
   }
 
   case MISSION_EXECUTION:
+
+    // cout << " this is MISSION_EXECUTION!!" << endl;
     if (!feedthrough_enable_)
       computeBodyRateCmd(cmdBodyRate_, targetPos_, targetVel_, targetAcc_);
     // std::cout << targetAcc_[0] << " " << targetAcc_[1] << " " << targetAcc_[2] << std::endl;
@@ -281,20 +284,47 @@ void geometricCtrl::cmdloopCallback(const ros::TimerEvent &event)
 
   case LANDING:
   {
-    geometry_msgs::PoseStamped landingmsg;
-    landingmsg.header.stamp = ros::Time::now();
-    landingmsg.pose = home_pose_;
-    landingmsg.pose.position.z = landingmsg.pose.position.z + 1.0;
-    target_pose_pub_.publish(landingmsg);
-    node_state = LANDED;
+    if(autoland())
+      node_state = LANDED;
     ros::spinOnce();
     break;
   }
   case LANDED:
     ROS_INFO("Landed. Please set to position control and disarm.");
+
     cmdloop_timer_.stop();
     break;
   }
+}
+
+bool geometricCtrl::autoland()
+{
+  geometry_msgs::PoseStamped landingmsg;
+  if(mavPos_(2)<=0.3)
+  {
+    if (current_state_.mode != "AUTO.LAND")
+    {
+      offb_set_mode_.request.custom_mode = "AUTO.LAND";
+      if (set_mode_client_.call(offb_set_mode_) && offb_set_mode_.response.mode_sent)
+      {
+        ROS_INFO("AUTO.LAN enabled");
+        return true;
+      }
+    }
+  }
+  else
+  {
+    landingmsg.header.stamp = ros::Time::now();
+    landingmsg.pose.position.z = 0.15;
+    landingmsg.pose.position.x = mavPos_(0);
+    landingmsg.pose.position.y = mavPos_(1);
+    landingmsg.pose.orientation.w = mavAtt_(0);
+    landingmsg.pose.orientation.x = mavAtt_(1);
+    landingmsg.pose.orientation.y = mavAtt_(2);
+    landingmsg.pose.orientation.z = mavAtt_(3);
+    target_pose_pub_.publish(landingmsg);
+  }
+  return false;
 }
 
 void geometricCtrl::mavstateCallback(const mavros_msgs::State::ConstPtr &msg) { current_state_ = *msg; }
@@ -330,6 +360,7 @@ void geometricCtrl::statusloopCallback(const ros::TimerEvent &event)
   pubSystemStatus();
 }
 
+//用于 rviz 显示
 void geometricCtrl::pubReferencePose(const Eigen::Vector3d &target_position, const Eigen::Vector4d &target_attitude)
 {
   geometry_msgs::PoseStamped msg;
@@ -414,9 +445,9 @@ void geometricCtrl::computeBodyRateCmd(Eigen::Vector4d &bodyrate_cmd, const Eige
   /// Compute BodyRate commands using differential flatness
   /// Controller based on Faessler 2017
   const Eigen::Vector3d a_ref = target_acc;
-  if (velocity_yaw_)
+  if (velocity_yaw_) 
   {
-    mavYaw_ = getVelocityYaw(mavVel_);
+    mavYaw_ = getVelocityYaw(mavVel_);// 根据速度方向确定偏航角
   }
   const Eigen::Vector4d q_ref = acc2quaternion(a_ref - g_, mavYaw_);
   const Eigen::Matrix3d R_ref = quat2RotMatrix(q_ref);
@@ -432,9 +463,10 @@ void geometricCtrl::computeBodyRateCmd(Eigen::Vector4d &bodyrate_cmd, const Eige
   const Eigen::Vector3d a_rd = R_ref * D_.asDiagonal() * R_ref.transpose() * target_vel; // Rotor drag
   const Eigen::Vector3d a_des = a_fb + a_ref - a_rd - g_;
 
+  // world系到机体系的旋转矩阵的四元数表示(期望姿态)
   q_des = acc2quaternion(a_des, mavYaw_);
 
-  if (ctrl_mode_ == ERROR_GEOMETRIC)
+  if (ctrl_mode_ == ERROR_GEOMETRIC) //ctrl_mode_ = 2
   {
     bodyrate_cmd = geometric_attcontroller(q_des, a_des, mavAtt_); // Calculate BodyRate
   }
@@ -571,7 +603,7 @@ Eigen::Vector4d geometricCtrl::geometric_attcontroller(const Eigen::Vector4d &re
   ratecmd.head(3) = (2.0 / attctrl_tau_) * error_att;
   rotmat = quat2RotMatrix(mavAtt_);
   zb = rotmat.col(2);
-  ratecmd(3) =
+  ratecmd(3) = 
       std::max(0.0, std::min(1.0, norm_thrust_const_ * ref_acc.dot(zb) + norm_thrust_offset_)); // Calculate thrust
 
   return ratecmd;

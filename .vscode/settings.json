@@ -53,5 +53,10 @@
         "streambuf": "cpp",
         "thread": "cpp",
         "typeinfo": "cpp"
-    }
+    },
+    "python.autoComplete.extraPaths": [
+        "/home/linux/work/Drone_Racing_BIT/devel/lib/python2.7/dist-packages",
+        "/home/linux/work/driver/bebop_ws/devel/lib/python2.7/dist-packages",
+        "/opt/ros/melodic/lib/python2.7/dist-packages"
+    ]
 }
