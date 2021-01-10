@@ -1,247 +1,96 @@
-/**
- * @file offb_node.cpp
- * @brief offboard example node, written with mavros version 0.14.2, px4 flight
- * stack and tested in Gazebo SITL
- */
-
-#include <ros/ros.h>
-#include <geometry_msgs/PoseStamped.h>
-#include <mavros_msgs/CommandBool.h>
-#include <mavros_msgs/SetMode.h>
-#include <mavros_msgs/State.h>
-#include <time.h>
+#include <px4_offb/uav_control.h>
 #include <iostream>
 
 using namespace std;
 
-class px4_mavros
+uav1Node::uav1Node():uavControl("uav_control")
 {
-public:
-    px4_mavros();
-
-    double pi;
-    /*位置控制信息*/
-    geometry_msgs::PoseStamped pose;
-
-    geometry_msgs::PoseStamped localPose;
-
-    bool island;
-
-    mavros_msgs::CommandBool arm_cmd;
-    /*px4当前状态*/
-    mavros_msgs::State current_state;
-
-    mavros_msgs::SetMode offb_set_mode;
-
-    ros::Rate *rate;
-    ros::Time start_time;
-    double setupTime;
-
-    ros::NodeHandle nh;
-    ros::Subscriber state_sub;
-    ros::Subscriber local_pos_sub;
-    ros::Subscriber position_sub;
-    ros::Subscriber activity_sub;
-    ros::Publisher local_pos_pub;
-    ros::ServiceClient arming_client;
-    ros::ServiceClient set_mode_client;
-
-    void state_cb(const mavros_msgs::State::ConstPtr &msg);
-    void local_pose_cb(const geometry_msgs::PoseStamped::ConstPtr &msg);
-    void setActivity_cb(const mavros_msgs::State::ConstPtr &msg);
-    void waitConnect();
-    bool arm();
-    bool disarm();
-    bool offboard();
-    bool land();
-    void start();
-};
-/* 构造函数 */
-px4_mavros::px4_mavros()
-{
-    offb_set_mode.request.custom_mode = "OFFBOARD";
-
+    
     island = false;
 
-    pose.pose.position.x = 0;
-    pose.pose.position.y = 0;
-    pose.pose.position.z = 1;
+    tagetPose.position.x = 0;
+    tagetPose.position.y = 0;
+    tagetPose.position.z = 0.7;
 
-    pi = 3.1415926;
-    setupTime = 10;
+    setPosition.pose = tagetPose;
+
+    // setVelocity.twist.angular.z = 1.5708;
+    /*************************初始位置偏差*******************************/
+    //uav1 初始位置为（0 0 0） --> 无人机位置参考原点在（0 0 0）(仿真中的设置有关，现实中没有偏差)
+    uav_offset.x = 0;
+    uav_offset.y = 0;
+    uav_offset.z = 0;
+
+    /*************************PID参数*******************************/
+    pid_x.p = 2.0;
+    pid_x.i = 0;
+    pid_x.d = 1.5;
+    pid_x.err_last = 0;
+
+    pid_y.p = 2.0;
+    pid_y.i = 0;
+    pid_y.d = 1.5;
+    pid_y.err_last = 0;
+
+    pid_z.p = 2.0;
+    pid_z.i = 0;
+    pid_z.d = 0.8;
+    pid_z.err_last = 0;
+
     rate = new ros::Rate(10.0);
-    /*详细参考 http://wiki.ros.org/mavros#Utility_commands */
-    /*FCU state*/
-    state_sub = nh.subscribe<mavros_msgs::State>("mavros/state", 10, &px4_mavros::state_cb, this);
-    /*Local frame setpoint position. NED坐标系(惯性系)*/
-    local_pos_pub = nh.advertise<geometry_msgs::PoseStamped>("mavros/setpoint_position/local", 10);
-    /*Change Arming status. */
-    arming_client = nh.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
-    /*Set FCU operation mode*/
-    set_mode_client = nh.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
-    /*Local position from FCU. NED坐标系(惯性系)*/
-    local_pos_sub = nh.subscribe<geometry_msgs::PoseStamped>("mavros/local_position/pose", 10, &px4_mavros::local_pose_cb, this);
 
-    activity_sub = nh.subscribe<mavros_msgs::State>("uav/activity", 1, &px4_mavros::setActivity_cb, this);
+    
 }
 
-void px4_mavros::state_cb(const mavros_msgs::State::ConstPtr &msg)
-{
-    current_state = *msg;
-}
-void px4_mavros::setActivity_cb(const mavros_msgs::State::ConstPtr &msg)
-{
-    if (strcmp(msg->mode.c_str(), "land") == 0)
-    {
-        ROS_INFO("px4 is landing");
-        island = true;
-        pose.pose.position.z = 0.1;
-        arm_cmd.request.value = false;
-    }
-}
-void px4_mavros::local_pose_cb(const geometry_msgs::PoseStamped::ConstPtr &msg)
-{
-    localPose.pose.position.z = msg->pose.position.z;
-}
 
-void px4_mavros::waitConnect()
+void uav1Node::start()
 {
-    ROS_INFO("wait for FCU connection...");
-    while (ros::ok() && current_state.connected)
-    {
-        ros::spinOnce();
-        rate->sleep();
-    }
-    ROS_INFO("FCU connection ok!");
-}
-bool px4_mavros::arm()
-{
-    arm_cmd.request.value = true;
-    if (arming_client.call(arm_cmd) &&
-        arm_cmd.response.success)
-    {
-        return true;
-    }
-    else
-        return false;
-}
-bool px4_mavros::disarm()
-{
-    arm_cmd.request.value = false;
-    if (arming_client.call(arm_cmd) &&
-        arm_cmd.response.success)
-    {
-        return true;
-    }
-    else
-        return false;
-}
-bool px4_mavros::land()
-{
-    offb_set_mode.request.custom_mode = "AUTO.LAND";
-    if (set_mode_client.call(offb_set_mode) && offb_set_mode.response.mode_sent)
-    {
-        ROS_INFO("AUTO.LAND enabled");
-        return true;
-    }
-    else
-        return false;
-}
+    //方便调参数
+    double param_kp_x, param_kd_x, param_kp_y, param_kd_y, param_kp_z, param_kd_z;
+    ros::Time last_request = ros::Time::now();
 
-bool px4_mavros::offboard()
-{
-    offb_set_mode.request.custom_mode = "OFFBOARD";
-    int i = 100;
-    for (i = 100; ros::ok() && i > 0; --i)
-    {
-        local_pos_pub.publish(pose);
-
-        /* 当前不是 OFFBOARD 模式 */
-        if (current_state.mode != "OFFBOARD")
-        {
-            /*设置 OFFBOARD 模式*/
-            if (set_mode_client.call(offb_set_mode) &&
-                offb_set_mode.response.mode_sent)
-            {
-                ROS_INFO("Offboard enabled");
-            }
-        }
-        else
-        {
-            /* 当前未解锁 */
-            if (!current_state.armed)
-            {
-                if (this->arm())
-                {
-                    ROS_INFO("Vehicle armed");
-                }
-            }
-        }
-        /*解锁成功提前退出*/
-        if (current_state.mode == "OFFBOARD" && current_state.armed)
-            return true;
-        ros::spinOnce();
-        rate->sleep();
-    }
-    return false;
-}
-
-void px4_mavros::start()
-{
-    double t;
-
-    if (!this->offboard())
+    if(!this->offboard())
     {
         while (ros::ok())
         {
             ROS_INFO("Offboard enabled ! Vehicle armed failed ! ");
+            pidVelocityControl();
             ros::spinOnce();
             rate->sleep();
         }
     }
-    setupTime = ros::Time::now().toSec() + 10;
-    while (ros::ok())
-    {
-        /*
-        t = ros::Time::now().toSec();
-        cout << t -  setupTime << endl;
-        if(t<=setupTime)
-        {
-            pose.pose.position.x = 0;
-            pose.pose.position.y = 1;
-            pose.pose.position.z = 1;
-        }
-        else
-        {
-            pose.pose.position.x = 1*sin((t-setupTime)/18*pi);
-            pose.pose.position.y = 1*cos((t-setupTime)/18*pi);
-        }
-        
-*/
-        local_pos_pub.publish(pose);
 
-        if (island == true)
-        {
-            if (land())
-            {
-                if (disarm())
-                {
-                    ROS_INFO("Vehicle diarmed");
-                    break;
-                }
-            }
-        }
+    while(ros::ok())
+    {
+
+        //速度PID控制
+        pidVelocityControl();
+
+        // 位置控制
+//        positionControl();
+
+        //判断是否满足降落条件
+        // if (island == true && currentPose.position.z<=0.15)
+        // {    
+        //     if( arming_client.call(arm_cmd) && arm_cmd.response.success)
+        //     {
+        //         ROS_INFO("Vehicle diarmed");
+        //         break;
+        //     }
+        // }
+
         ros::spinOnce();
         rate->sleep();
     }
+
 }
 
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "uav_offb");
 
-    px4_mavros uav;
-    uav.start();
+    uav1Node uav1;
+    uav1.start();
 
     return 0;
 }

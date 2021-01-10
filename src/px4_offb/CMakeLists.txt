@@ -116,7 +116,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -134,10 +134,10 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 
-add_executable(uav_offb src/uav.cpp)
-# add_executable(uav2_offb src/uav2.cpp)
-# add_executable(uav3_offb src/uav3.cpp)
-# add_executable(px4_pos_control src/px4_pos_control.cpp)
+add_executable(vision_pose src/vision_pose.cpp)
+add_executable(uav_offb src/uav.cpp src/uav_control.cpp)
+add_executable(save_data_node src/save_data_node.cpp)
+add_executable(odom2camerapose_node src/odom2camerapose.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -147,15 +147,17 @@ add_executable(uav_offb src/uav.cpp)
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 add_dependencies(uav_offb ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-# add_dependencies(uav2_offb ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-# add_dependencies(uav3_offb ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(vision_pose ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(save_data_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(odom2camerapose_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 # add_dependencies(px4_pos_control ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(uav_offb ${catkin_LIBRARIES})
-# target_link_libraries(uav2_offb ${catkin_LIBRARIES})
-# target_link_libraries(uav3_offb ${catkin_LIBRARIES})
+target_link_libraries(vision_pose ${catkin_LIBRARIES})
+target_link_libraries(save_data_node ${catkin_LIBRARIES})
+target_link_libraries(odom2camerapose_node ${catkin_LIBRARIES})
 
 # target_link_libraries(px4_pos_control  ${catkin_LIBRARIES})
 #############
