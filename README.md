@@ -69,7 +69,7 @@ sudo gedit ~/.bashrc
 Add the following command to the end of the file:
 
 ```
-export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:${your Drone_Racing_BIT path}/Drone_Racing_BIT/src/simulation/models
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:${your Drone_Racing_BIT path}/Drone_Racing_BIT/src/simulation/gazebo_simulation/models
 source ${your px4 path}/Firmware_v110/Tools/setup_gazebo.bash ${your px4 path}/Firmware_v110 ${your px4 path}/Firmware_v110/build/px4_sitl_default
 source ${your Drone_Racing_BIT path}/Drone_Racing_BIT/devel/setup.bash
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:${your px4 path}/Firmware_v110

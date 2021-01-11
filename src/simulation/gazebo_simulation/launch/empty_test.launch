@@ -54,7 +54,6 @@
       <arg name="y" value="$(arg y)" />
       <arg name="z" value="$(arg z)" />
       <arg name="vehicle" value="$(arg mav_name)"/>
-      <arg name="world" value="$(arg world)"/>
   </include>
   <group if="$(arg visualization)">
       <node type="rviz" name="rviz" pkg="rviz" args="-d $(find drone_racing_simulation)/config/config_file.rviz" />
