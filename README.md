@@ -37,6 +37,7 @@ sudo ./install_geographiclib_datasets.sh
 ```
 git clone https://github.com/Lee0326/Drone_Racing_BIT.git
 cd Drone_Racing_BIT
+git submodule init && git submodule update
 catkin_make
 ```
 
