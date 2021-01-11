@@ -1,0 +1,3 @@
+[submodule "src/geometric_controller"]
+	path = src/geometric_controller
+	url = https://github.com/Lee0326/geometric_controller.git
