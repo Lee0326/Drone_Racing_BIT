@@ -23,7 +23,7 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://realsense_D435i/meshes/D435i_pose.dae</uri>
+            <uri>model://realsense_D435i/meshes/realsense.obj</uri>
           </mesh>
         </geometry>
       </visual>
@@ -126,7 +126,7 @@
     </link>
 
     <link name="depth_optical_frame">
-      <pose>0.0 0 0 -1.570796 0 -1.570796</pose>
+      <pose>0.0 0 0.015 -1.570796 0 -1.570796</pose>
       <!-- 物理参数 -->
       <inertial>
         <mass>0.0001</mass>
@@ -173,8 +173,7 @@
     </joint>
 
   <plugin name="realsense_plugin" filename="librealsense_gazebo_plugin.so">
-  </plugin>
-  
+    </plugin>
   <plugin name="realsense_pose_plugin" filename="libgazebo_ros_p3d.so">
     <alwaysOn>true</alwaysOn>
     <updateRate>50.0</updateRate>
@@ -187,6 +186,3 @@
   </plugin>
   </model>
 </sdf>
-
-
-

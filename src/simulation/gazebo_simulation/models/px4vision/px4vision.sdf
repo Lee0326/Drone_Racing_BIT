@@ -346,7 +346,7 @@
     </joint>
     <include>
       <uri>model://gps</uri>
-      <pose>0 0 0.12 0 0 0</pose>
+      <pose>0 0 0.05 0 0 0</pose>
       <name>gps</name>
     </include>
     <joint name='gps_joint' type='fixed'>
@@ -577,9 +577,10 @@
       <accelerometerBiasCorrelationTime>300.0</accelerometerBiasCorrelationTime>
       <accelerometerTurnOnBiasSigma>0.196</accelerometerTurnOnBiasSigma>
     </plugin>
+
     <include>
       <uri>model://realsense_D435i</uri>
-      <pose>0.2 0 0 0 0 0</pose>
+      <pose>0.08 0 -0.025 0 0 0</pose>
     </include>
     <joint name="D435i_joint" type="fixed">
       <child>realsense_D435i::realsense_camera_link</child>
