@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 
     ros::Subscriber odom_sub;
     // odom_sub = nh.subscribe<nav_msgs::Odometry>("/mbot/odom", 10,odom_cb);
-    odom_sub = nh.subscribe<nav_msgs::Odometry>("/t265/odom/sample", 10,odom_cb);
+    odom_sub = nh.subscribe<nav_msgs::Odometry>("/px4/gazebo/odom", 10,odom_cb);
     ros::Publisher camerapose_pub;
     // camerapose_pub = nh.advertise<geometry_msgs::PoseStamped>("/mbot/camerapose", 1);
     camerapose_pub = nh.advertise<geometry_msgs::PoseStamped>("/d534i/camerapose", 1);
