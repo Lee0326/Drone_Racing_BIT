@@ -84,7 +84,7 @@
     <include>
       <name>circle_gate_0</name>
       <uri>model://circle_gate</uri>
-      <pose>1.414 1.414 0.4 0 0 -0.7854</pose>
+      <pose>1.414 1.414 0.5 0 0 -0.7854</pose>
     </include>
     <include>
       <name>circle_gate_1</name>
@@ -94,12 +94,12 @@
     <include>
       <name>circle_gate_2</name>
       <uri>model://circle_gate</uri>
-      <pose>-1.414 -1.414 0.3 0 -0 2.3562</pose>
+      <pose>-1.414 -1.414 0.5 0 -0 2.3562</pose>
     </include>
     <include>
       <name>circle_gate_3</name>
       <uri>model://circle_gate</uri>
-      <pose>1.414 -1.414 0.6 0 -0 0.7854</pose>
+      <pose>1.414 -1.414 0.5 0 -0 0.7854</pose>
     </include>
     <include>
       <name>room</name>

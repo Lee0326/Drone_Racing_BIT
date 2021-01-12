@@ -19,6 +19,7 @@
         <geometry>
           <box>
             <size>0.47 0.47 0.11</size>
+            <!-- <size>0.01 0.01 0.01</size> -->
           </box>
         </geometry>
         <surface>
@@ -581,7 +582,7 @@
     <plugin name="realsense_pose_plugin" filename="libgazebo_ros_p3d.so">
       <alwaysOn>true</alwaysOn>
       <updateRate>50.0</updateRate>
-      <bodyName>gps::link</bodyName>
+      <bodyName>base_link</bodyName>
       <topicName>px4/gazebo/odom</topicName>
       <gaussianNoise>0.0</gaussianNoise>
       <frameName>world</frameName>

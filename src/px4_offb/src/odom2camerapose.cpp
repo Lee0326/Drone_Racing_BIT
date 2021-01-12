@@ -1,11 +1,14 @@
 #include <ros/ros.h>  
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/TwistStamped.h>
 #include <tf/tf.h>
 
 #define pi 3.1415926
 
-geometry_msgs::PoseStamped pose;
+geometry_msgs::PoseStamped cameraPose;
+geometry_msgs::PoseStamped px4Pose;
+geometry_msgs::TwistStamped px4Twist;
 bool odomRec_flag = false;
 void odom_cb(const nav_msgs::Odometry::ConstPtr& msg)
 {
@@ -20,13 +23,11 @@ void odom_cb(const nav_msgs::Odometry::ConstPtr& msg)
     q2.setY(0);
     q2.setZ(-sin(pi/4));
 
+    cameraPose.header = msg->header;
 
-
-    pose.header = msg->header;
-
-    pose.pose.position.x = msg->pose.pose.position.x + 0;
-    pose.pose.position.y = msg->pose.pose.position.y + 0;
-    pose.pose.position.z = msg->pose.pose.position.z + 0;
+    cameraPose.pose.position.x = msg->pose.pose.position.x + 0;
+    cameraPose.pose.position.y = msg->pose.pose.position.y + 0;
+    cameraPose.pose.position.z = msg->pose.pose.position.z + 0;
 
     q3.setW(msg->pose.pose.orientation.w);
     q3.setX(msg->pose.pose.orientation.x);
@@ -35,10 +36,14 @@ void odom_cb(const nav_msgs::Odometry::ConstPtr& msg)
 
     q3 = q3 * q1; //用于旋转的四元数一定要乘在右边！！！！
     q3 = q3 * q2;
-    pose.pose.orientation.w = q3.getW();
-    pose.pose.orientation.x = q3.getX();
-    pose.pose.orientation.y = q3.getY();
-    pose.pose.orientation.z = q3.getZ();
+
+    cameraPose.pose.orientation.w = q3.getW();
+    cameraPose.pose.orientation.x = q3.getX();
+    cameraPose.pose.orientation.y = q3.getY();
+    cameraPose.pose.orientation.z = q3.getZ();
+
+    px4Pose.pose = msg->pose.pose;
+    px4Twist.twist = msg->twist.twist;
 
     odomRec_flag = true;
 }
@@ -51,15 +56,23 @@ int main(int argc, char** argv)
     ros::Rate loop_rate(30);
 
     ros::Subscriber odom_sub;
-    // odom_sub = nh.subscribe<nav_msgs::Odometry>("/mbot/odom", 10,odom_cb);
+    ros::Publisher cameraPose_pub;
+    ros::Publisher px4Pose_pub;
+    ros::Publisher px4Twist_pub;
+
     odom_sub = nh.subscribe<nav_msgs::Odometry>("/px4/gazebo/odom", 10,odom_cb);
-    ros::Publisher camerapose_pub;
-    // camerapose_pub = nh.advertise<geometry_msgs::PoseStamped>("/mbot/camerapose", 1);
-    camerapose_pub = nh.advertise<geometry_msgs::PoseStamped>("/d534i/camerapose", 1);
+
+    cameraPose_pub = nh.advertise<geometry_msgs::PoseStamped>("/d534i/camerapose", 1);
+    // px4Pose_pub = nh.advertise<geometry_msgs::PoseStamped>("/px4/gazebo/pose", 1);
+    // px4Twist_pub = nh.advertise<geometry_msgs::TwistStamped>("/px4/gazebo/twist", 1);
     while (ros::ok())
     {
         if(odomRec_flag)
-            camerapose_pub.publish(pose);
+        {
+            cameraPose_pub.publish(cameraPose);
+            // px4Pose_pub.publish(px4Pose);
+            // px4Twist_pub.publish(px4Twist);
+        }    
 
         ros::spinOnce();
         loop_rate.sleep();
