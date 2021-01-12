@@ -100,7 +100,7 @@
     <param name="sdf_map/virtual_ceil_height"   value="2.5"/>
     <param name="sdf_map/show_occ_time"  value="false"/>
     <param name="sdf_map/show_esdf_time" value="false"/>
-    <param name="sdf_map/pose_type"     value="2"/>  
+    <param name="sdf_map/pose_type"     value="1"/>  
     <param name="sdf_map/frame_id"      value="world"/>
 
   <!-- planner manager -->

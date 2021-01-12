@@ -5,8 +5,8 @@
   <arg name="map_size_z" value=" 5.0"/>
 
   <!-- topic of your odometry such as VIO or LIO -->
-  <arg name="odom_topic" value="/D435i/depth/odom" />
-
+  <!-- <arg name="odom_topic" value="/px4/gazebo/odom" /> -->
+  <arg name="odom_topic" value="/mavros/local_position/odom" />
   <!-- main algorithm params -->
   <include file="$(find plan_manage)/launch/kino_algorithm.xml">
 
@@ -18,7 +18,9 @@
     <!-- camera pose: transform of camera frame in the world frame -->
     <!-- depth topic: depth image, 640x480 by default -->
     <!-- don't set cloud_topic if you already set these ones! -->
-    <arg name="camera_pose_topic" value="/D435i/depth/odom"/>
+    <!-- <arg name="camera_pose_topic" value="/D435i/depth/odom"/> -->
+    
+    <arg name="camera_pose_topic" value="/d534i/camerapose"/>
     <arg name="depth_topic" value="/realsense_plugin/camera/depth/image_raw"/>
 
     <!-- topic of point cloud measurement, such as from LIDAR  -->
@@ -32,8 +34,8 @@
     <arg name="fy" value="554.3826904296875"/>
 
     <!-- maximum velocity and acceleration the drone will reach -->
-    <arg name="max_vel" value="1.5" />
-    <arg name="max_acc" value="1.0" />
+    <arg name="max_vel" value="1.0" />
+    <arg name="max_acc" value="0.5" />
 
     <!-- 1: use 2D Nav Goal to select goal  -->
     <!-- 2: use global waypoints below  -->
@@ -49,7 +51,7 @@
 
     <!-- set more waypoints if you need -->
     <arg name="point1_x" value="0.0" />
-    <arg name="point1_y" value="-2.0" />
+    <arg name="point1_y" value="-2.2" />
     <arg name="point1_z" value="1.0" />
 
     <arg name="point2_x" value="-2.0" />
