@@ -19,7 +19,7 @@
         <geometry>
           <mesh>
             <uri>model://circle_gate/meshes/circle_gate.stl</uri>
-            <scale>0.8 0.8 0.8</scale>
+            <scale>1 1 1</scale>
           </mesh>
         </geometry>
       </collision>
@@ -28,7 +28,7 @@
         <geometry>
           <mesh>
             <uri>model://circle_gate/meshes/circle_gate.stl</uri>
-            <scale>0.8 0.8 0.8</scale>
+            <scale>1 1 1</scale>
           </mesh>
         </geometry>
         <material>
