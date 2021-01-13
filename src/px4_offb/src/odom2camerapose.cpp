@@ -60,7 +60,7 @@ int main(int argc, char** argv)
     ros::Publisher px4Pose_pub;
     ros::Publisher px4Twist_pub;
 
-    odom_sub = nh.subscribe<nav_msgs::Odometry>("/px4/gazebo/odom", 10,odom_cb);
+    odom_sub = nh.subscribe<nav_msgs::Odometry>("/mavros/local_position/odom", 10,odom_cb);
 
     cameraPose_pub = nh.advertise<geometry_msgs::PoseStamped>("/d534i/camerapose", 1);
     // px4Pose_pub = nh.advertise<geometry_msgs::PoseStamped>("/px4/gazebo/pose", 1);
